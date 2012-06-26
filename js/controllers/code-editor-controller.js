@@ -101,6 +101,8 @@ exports.CodeEditorController = Montage.create(Component, {
         value: function() {
             //TODO:add logic to check some configuration file to load the right code editor
             this.codeEditor = CodeMirror;
+
+            //todo:load all avaialable themes
         }
     },
 
