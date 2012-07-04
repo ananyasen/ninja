@@ -84,7 +84,7 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                 //Adding element once it is loaded
                 element.onload = function () {
                     element.onload = null;
-                    self.application.ninja.elementMediator.addElements(element, rules, true);
+                    self.application.ninja.elementMediator.addElements(element, rules, true/*notify*/, false /*callAddDelegate*/);
                 };
                 //Setting rules of element
                 rules = {
@@ -93,7 +93,7 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                     'left' : '100px'
                 };
                 //
-                self.application.ninja.elementMediator.addElements(element, rules, false);
+                self.application.ninja.elementMediator.addElements(element, rules, false/*notify*/, false /*callAddDelegate*/);
             } else {
                 //TODO: HANDLE ERROR ON SAVING FILE TO BE ADDED AS ELEMENT
             }
@@ -210,9 +210,9 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
             newY = styles ? ("" + (styles.top + (25 * counter)) + "px") : "100px";
 
             if(!styles || (styles && !styles.position)){
-                this.application.ninja.elementMediator.addElements(element, null, false);
+                this.application.ninja.elementMediator.addElements(element, null, false/*notify*/, false /*callAddDelegate*/);
             }else if(styles && (styles.position === "absolute")){
-                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false);//displace
+                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false/*notify*/, false /*callAddDelegate*/);//displace
             }
         }
     }

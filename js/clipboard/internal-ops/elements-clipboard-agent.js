@@ -243,7 +243,7 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
                 styles = null;
             }
 
-            this.application.ninja.elementMediator.addElements(canvas, styles, false);
+            this.application.ninja.elementMediator.addElements(canvas, styles, false/*notify*/, false /*callAddDelegate*/);
 
             worldData = sourceCanvas.elementModel.shapeModel ? sourceCanvas.elementModel.shapeModel.GLWorld.exportJSON(): null;
             if(worldData)
@@ -339,7 +339,7 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
             newY = styles ? ("" + (styles.top + (25 * counter)) + "px") : "100px";
 
             if(!styles || (styles && !styles.position)){
-                this.application.ninja.elementMediator.addElements(element, null, false);
+                this.application.ninja.elementMediator.addElements(element, null, false /*notify*/, false /*callAddDelegate*/);
             }else if(styles && (styles.position === "absolute")){
                 if((element.tagName === "IMG") || (element.getAttribute("type") === "image/svg+xml")){
                     element.onload = function(){
@@ -349,7 +349,7 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
                     }
                 }
 
-                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false);//displace
+                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false/*notify*/, false /*callAddDelegate*/);//displace
             }
         }
     },
