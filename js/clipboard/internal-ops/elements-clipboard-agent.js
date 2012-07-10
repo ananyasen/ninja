@@ -371,7 +371,8 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
                     }
                 }
 
-                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false/*notify*/, false /*callAddDelegate*/);//displace            }
+                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false/*notify*/, false /*callAddDelegate*/);//displace
+            }
         }
     },
 
