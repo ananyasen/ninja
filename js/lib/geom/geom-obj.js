@@ -1,8 +1,33 @@
 /* <copyright>
- This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
- No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
- (c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
- </copyright> */
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+</copyright> */
 
 var MaterialsModel = require("js/models/materials-model").MaterialsModel;
 
@@ -191,27 +216,10 @@ exports.GeomObj = Object.create(Object.prototype, {
                         nMats = this._materialArray.length;
                     }
 
-                    var stops = [],
-                        colors = c.color;
-
-                    var len = colors.length;
-                    // TODO - Current shaders only support 4 color stops
-                    if (len > 4) {
-                        len = 4;
-                    }
-
-                    for (var n = 0; n < len; n++) {
-                        var position = colors[n].position / 100;
-                        var cs = colors[n].value;
-                        var stop = [cs.r / 255, cs.g / 255, cs.b / 255, cs.a];
-                        stops.push(stop);
-
-                        if (nMats === this._materialTypeArray.length) {
-                            for (i = 0; i < nMats; i++) {
-                                if (this._materialTypeArray[i] == type) {
-                                    this._materialArray[i].setProperty("color" + (n + 1), stop.slice(0));
-                                    this._materialArray[i].setProperty("colorStop" + (n + 1), position);
-                                }
+                    if (nMats === this._materialTypeArray.length) {
+                        for (i = 0; i < nMats; i++) {
+                            if (this._materialTypeArray[i] == type) {
+                                this._materialArray[i].setGradientData(c.color);
                             }
                         }
                     }
@@ -281,13 +289,13 @@ exports.GeomObj = Object.create(Object.prototype, {
             this._materialArray.push(strokeMaterial);
             this._materialTypeArray.push("stroke");
 
-			// don't set the value here.  The material editor may set a color directly
-			// to the material without setting this value in the obj.  The following
-			// lines of code will clobber the value in the material
+            // don't set the value here.  The material editor may set a color directly
+            // to the material without setting this value in the obj.  The following
+            // lines of code will clobber the value in the material
             //if (this._strokeColor)
             //    this.setStrokeColor(this._strokeColor);
 
-			this._strokeMaterial = strokeMaterial;
+            this._strokeMaterial = strokeMaterial;
 
             return strokeMaterial;
         }
@@ -308,14 +316,14 @@ exports.GeomObj = Object.create(Object.prototype, {
 
             this._materialArray.push(fillMaterial);
             this._materialTypeArray.push("fill");
-			
-			// don't set the value here.  The material editor may set a color directly
-			// to the material without setting this value in the obj.  The following
-			// lines of code will clobber the value in the material
+
+            // don't set the value here.  The material editor may set a color directly
+            // to the material without setting this value in the obj.  The following
+            // lines of code will clobber the value in the material
             //if (this._fillColor)
             //     this.setFillColor(this._fillColor);
 
-			this._fillMaterial = fillMaterial;
+            this._fillMaterial = fillMaterial;
 
             return fillMaterial;
         }
@@ -323,7 +331,7 @@ exports.GeomObj = Object.create(Object.prototype, {
 
     exportMaterialsJSON: {
         value: function() {
-			MaterialsModel = require("js/models/materials-model").MaterialsModel;
+            MaterialsModel = require("js/models/materials-model").MaterialsModel;
 
             var jObj;
             if (this._materialArray && this._materialNodeArray && this.getWorld().isWebGL()) {
@@ -355,7 +363,7 @@ exports.GeomObj = Object.create(Object.prototype, {
 
     importMaterialsJSON: {
         value: function(jObj) {
-			MaterialsModel = require("js/models/materials-model").MaterialsModel;
+            MaterialsModel = require("js/models/materials-model").MaterialsModel;
 
             this._materialArray = [];
             this._materialTypeArray = [];
@@ -382,7 +390,7 @@ exports.GeomObj = Object.create(Object.prototype, {
                     case "tunnel":
                     case "reliefTunnel":
                     case "squareTunnel":
-					case "flag":
+                    case "flag":
                     case "twist":
                     case "fly":
                     case "julia":
@@ -392,8 +400,8 @@ exports.GeomObj = Object.create(Object.prototype, {
                     case "keleidoscope":
                     case "radialBlur":
                     case "pulse":
-					case "twistVert":
-					case "taper":
+                    case "twistVert":
+                    case "taper":
                         mat = MaterialsModel.getMaterialByShader(shaderName);
                         if (mat)  mat = mat.dup();
                         break;
@@ -447,12 +455,12 @@ exports.GeomObj = Object.create(Object.prototype, {
             // get the normalized device coordinates (NDC) for
             // all position and dimensions.
             var world = this.getWorld();
-            var	vpw = world.getViewportWidth(),  vph = world.getViewportHeight();
-            var	xNDC = 2*this._xOffset/vpw,  yNDC = -2*this._yOffset/vph;
+            var vpw = world.getViewportWidth(),  vph = world.getViewportHeight();
+            var xNDC = 2*this._xOffset/vpw,  yNDC = -2*this._yOffset/vph;
 
             var aspect = world.getAspect();
             var zn = world.getZNear(),  zf = world.getZFar();
-            var	t = zn * Math.tan(world.getFOV() * Math.PI / 360.0),
+            var t = zn * Math.tan(world.getFOV() * Math.PI / 360.0),
                 b = -t,
                 r = aspect*t,
                 l = -r;
@@ -477,12 +485,12 @@ exports.GeomObj = Object.create(Object.prototype, {
             // get the normalized device coordinates (NDC) for
             // all position and dimensions.
             var world = this.getWorld();
-            var	vpw = world.getViewportWidth(),  vph = world.getViewportHeight();
-            var	xNDC = 2*preViewPt[0]/vpw,  yNDC = -2*preViewPt[1]/vph;
+            var vpw = world.getViewportWidth(),  vph = world.getViewportHeight();
+            var xNDC = 2*preViewPt[0]/vpw,  yNDC = -2*preViewPt[1]/vph;
 
             var aspect = world.getAspect();
             var zn = world.getZNear(),  zf = world.getZFar();
-            var	t = zn * Math.tan(world.getFOV() * Math.PI / 360.0),
+            var t = zn * Math.tan(world.getFOV() * Math.PI / 360.0),
                 b = -t,
                 r = aspect*t,
                 l = -r;

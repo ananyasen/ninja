@@ -1,7 +1,32 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
 var RDGE = RDGE || {};
@@ -38,8 +63,8 @@ RDGE.particle = function (def, id) {
 
     this.randomize3 = function (min, max) {
         return [this.randomize(min[0], max[0]),
-							this.randomize(min[1], max[1]),
-							this.randomize(min[2], max[2])];
+                            this.randomize(min[1], max[1]),
+                            this.randomize(min[2], max[2])];
     };
 
     this.spawn = function (spawnMatrix) {
@@ -53,7 +78,7 @@ RDGE.particle = function (def, id) {
             // calculate the initial position in world space.
             this.pos = RDGE.mat4.transformPoint(spawnMatrix, this.pos);
         }
-        // all other values are assumed to be defined in local or world space depending on 
+        // all other values are assumed to be defined in local or world space depending on
         // the particles worldSpace designation.
         var toRadians = Math.PI / 180.0;
         if (this.def.initialsize) {
@@ -124,7 +149,7 @@ RDGE.particleBuffer = function (pdef, emitter, size) {
                     'u_textureSize': { 'type': 'vec2' },
                     'u_frameSize': { 'type': 'vec2' },
                     's_texture0': { 'type': 'tex2d' }
-                    //					's_texture1' : { 'type' : 'tex2d' }
+                    //                  's_texture1' : { 'type' : 'tex2d' }
                 }
             }]
         }
@@ -310,10 +335,10 @@ RDGE.particleBuffer = function (pdef, emitter, size) {
             var x, y, z, w;
             var p = this.particles[i];
             var age = (p.age / p.lifespan); // normalized age
-            // combine frame number and age and store in w. 
-            // to decode : 
-            //		frame = floor( w ); 
-            //		age = fract( w ); 
+            // combine frame number and age and store in w.
+            // to decode :
+            //      frame = floor( w );
+            //      age = fract( w );
             var pw = Math.min(age, 0.999) + Math.floor(p.frame);
             if (age < 1.0) { // || (pdef.persist != undefined && pdef.persist == true)) {
                 var px = p.pos[0];
@@ -457,7 +482,7 @@ RDGE.particleBuffer = function (pdef, emitter, size) {
             else {
                 shaderparms.u_viewMatrix.set(activeCam.view);
                 shaderparms.u_worldMatrix.set(this.owner.world);
-                //				shaderparms.u_mvMatrix.set(RDGE.mat4.mul(this.owner.world, activeCam.view));
+                //              shaderparms.u_mvMatrix.set(RDGE.mat4.mul(this.owner.world, activeCam.view));
             }
             shaderparms.u_projMatrix.set(activeCam.proj);
 
@@ -468,7 +493,7 @@ RDGE.particleBuffer = function (pdef, emitter, size) {
             shaderparms.u_textureSize.set(pdef.textureSize);
             shaderparms.u_frameSize.set(pdef.frameSize);
             shaderparms.s_texture0.set(this.texture);
-            //			shaderparms.s_texture1.set(null);
+            //          shaderparms.s_texture1.set(null);
 
             var passCount = this.shader.begin();
             for (passIdx = 0; passIdx < passCount; ++passIdx) {
@@ -723,7 +748,7 @@ RDGE.particleSys = function (addr) {
             var emin = emitter.pbuffer.bounds.min;
             var emax = emitter.pbuffer.bounds.max;
 
-            // calculate a bounds that fits all particles.  
+            // calculate a bounds that fits all particles.
             if (emin[0] < bmin[0]) { bmin[0] = emin[0]; }
             if (emin[1] < bmin[1]) { bmin[1] = emin[1]; }
             if (emin[2] < bmin[2]) { bmin[2] = emin[2]; }

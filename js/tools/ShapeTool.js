@@ -1,7 +1,32 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
 var Montage = require("montage/core/core").Montage,
@@ -16,29 +41,29 @@ var World = require("js/lib/drawing/world").World;
 exports.ShapeTool = Montage.create(DrawingTool, {
     drawingFeedback: { value: { mode: "Draw3D", type: "rectangle" } },
 
-	_targetedElement: { value: null, writable: true },
+    _targetedElement: { value: null, writable: true },
 
-	_mouseDownHitRec: { value: null, writable: true, enumerable: true, configurable: true },
-	_mouseUpHitRec: { value: null, writable: true, enumerable: true, configurable: true },
+    _mouseDownHitRec: { value: null, writable: true, enumerable: true, configurable: true },
+    _mouseUpHitRec: { value: null, writable: true, enumerable: true, configurable: true },
 
-	_canvasCounter: {value: 0,  writable: true,  enumerable: true, configurable: true },
+    _canvasCounter: {value: 0,  writable: true,  enumerable: true, configurable: true },
 
-	HandleLeftButtonDown:
-	{
-		value: function (event)
-		{
-			if(this._canDraw) {
-				this._isDrawing = true;
-			}
+    HandleLeftButtonDown:
+    {
+        value: function (event)
+        {
+            if(this._canDraw) {
+                this._isDrawing = true;
+            }
 
             this.startDraw(event);
-		}
-	},
+        }
+    },
 
     HandleMouseMove:
-	{
-		value: function (event)
-		{
+    {
+        value: function (event)
+        {
 
             /* TAG */
             if(this.isDrawing) {
@@ -53,7 +78,7 @@ exports.ShapeTool = Montage.create(DrawingTool, {
         }
     },
 
-	HandleLeftButtonUp: {
+    HandleLeftButtonUp: {
         value: function (event) {
             var canvas, w, h;
             this.drawData = this.getDrawingData();
@@ -113,67 +138,67 @@ exports.ShapeTool = Montage.create(DrawingTool, {
         }
     },
 
-	AddCustomFeedback: {
-		value: function (event) {
-			NJevent("enableStageMove");
+    AddCustomFeedback: {
+        value: function (event) {
+            NJevent("enableStageMove");
 
             this.application.ninja.stage.stageDeps.snapManager.setupDragPlaneFromPlane( workingPlane );
-		}
-	},
+        }
+    },
 
-	RemoveCustomFeedback: {
-		value: function (event) {
-			if (this._targetedElement) {
+    RemoveCustomFeedback: {
+        value: function (event) {
+            if (this._targetedElement) {
                 this._targetedElement.classList.remove("active-element-outline");
-				this._targetedElement = null;
-			}
+                this._targetedElement = null;
+            }
 
-			NJevent("disableStageMove");
+            NJevent("disableStageMove");
 
             this.application.ninja.stage.stageDeps.snapManager.clearDragPlane();
-		}
-	},
+        }
+    },
 
-	/** Show a border when mousing
-	 * over existing canvas elements to signal to the user that
-	 * the drawing operation will act on the targeted canvas.
-	**/
-	_showFeedbackOnMouseMove: {
-		value: function (event) {
-			// TODO - This call is causing the canvas to redraw 3 times per mouse move
-			var targetedObject = this.application.ninja.stage.getElement(event, true);
+    /** Show a border when mousing
+     * over existing canvas elements to signal to the user that
+     * the drawing operation will act on the targeted canvas.
+    **/
+    _showFeedbackOnMouseMove: {
+        value: function (event) {
+            // TODO - This call is causing the canvas to redraw 3 times per mouse move
+            var targetedObject = this.application.ninja.stage.getElement(event, true);
 
-			if (targetedObject) {
-				if((targetedObject.nodeName === "CANVAS") && !ShapesController.isElementAShape(targetedObject))
-				{
-					if (targetedObject !== this._targetedElement) {
-						if(this._targetedElement)
-						{
+            if (targetedObject) {
+                if((targetedObject.nodeName === "CANVAS") && !ShapesController.isElementAShape(targetedObject))
+                {
+                    if (targetedObject !== this._targetedElement) {
+                        if(this._targetedElement)
+                        {
                             this._targetedElement.classList.remove("active-element-outline");
-						}
-						this._targetedElement = targetedObject;
+                        }
+                        this._targetedElement = targetedObject;
                         this._targetedElement.classList.add("active-element-outline");
-					}
-				}
-				else if (this._targetedElement) {
-					this._targetedElement.classList.remove("active-element-outline");
-					this._targetedElement = null;
-				}
-			}
-			else if (this._targetedElement) {
-				this._targetedElement.classList.remove("elem-red-outline");
-				this._targetedElement = null;
-			}
-		}
-	},
+                    }
+                }
+                else if (this._targetedElement) {
+                    this._targetedElement.classList.remove("active-element-outline");
+                    this._targetedElement = null;
+                }
+            }
+            else if (this._targetedElement) {
+                this._targetedElement.classList.remove("elem-red-outline");
+                this._targetedElement = null;
+            }
+        }
+    },
 
-	RenderShape:
-	{
-		value: function (w, h, planeMat, midPt)
-		{
-			// Override in subclasses
-		}
-	},
+    RenderShape:
+    {
+        value: function (w, h, planeMat, midPt)
+        {
+            // Override in subclasses
+        }
+    },
 
     getGLWorld: {
         value: function (canvas, use3D)
@@ -190,26 +215,26 @@ exports.ShapeTool = Montage.create(DrawingTool, {
         }
     },
 
-	// We can draw on an existing canvas unless it has only a single shape object
-	_useExistingCanvas: {
-		value: function()
-		{
-			var target;
-			if (this._targetedElement && (this._targetedElement.nodeName === "CANVAS") && !ShapesController.isElementAShape(this._targetedElement))
-				target = this._targetedElement;
-			else
-			{
-				var container = this.application.ninja.currentDocument.model.domContainer;
-				if (container && (container.nodeName === "CANVAS"))
-				{
-					target = container;
-					this._targetedElement = target;
-				}
-			}
+    // We can draw on an existing canvas unless it has only a single shape object
+    _useExistingCanvas: {
+        value: function()
+        {
+            var target;
+            if (this._targetedElement && (this._targetedElement.nodeName === "CANVAS") && !ShapesController.isElementAShape(this._targetedElement))
+                target = this._targetedElement;
+            else
+            {
+                var container = this.application.ninja.currentDocument.model.domContainer;
+                if (container && (container.nodeName === "CANVAS"))
+                {
+                    target = container;
+                    this._targetedElement = target;
+                }
+            }
 
-			return target;
-		}
-	},
+            return target;
+        }
+    },
 
     setColor: {
         value: function(canvas, color, isFill, toolId)

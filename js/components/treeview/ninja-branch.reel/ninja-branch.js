@@ -1,8 +1,33 @@
 /* <copyright>
- This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
- No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
- (c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
- </copyright> */
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+</copyright> */
 
 var Montage = require("montage").Montage,
     TreeNode = require("js/components/treeview/tree-node").TreeNode;
@@ -47,7 +72,7 @@ var Branch = exports.Branch = Montage.create(TreeNode, {
         value: function() {
             this.collapser.removeAttribute('id');
             this.label._element.addEventListener('click', this, false);
-            
+
             if(this.hideLabel) {
                 this.label.element.style.display = "none";
             }
@@ -57,17 +82,17 @@ var Branch = exports.Branch = Montage.create(TreeNode, {
     },
     handleWebkitTransitionEnd : {
         value: function(e) {
-            e.stopPropagation(); 
-            
+            e.stopPropagation();
+
             ///// Remove Transition
             this._removeTransition = true;
             this.collapser.removeEventListener('webkitTransitionEnd', this, false);
-            
+
             //// If it's an expand transition, restore height to auto
             if(this.isExpanded) {
                 this._switchToAuto = true;
             }
-            
+
             this.needsDraw = true;
 
         }
@@ -90,9 +115,9 @@ var Branch = exports.Branch = Montage.create(TreeNode, {
             if (this.sourceObject[this.labelKey]) {
                 this._labelText = this.sourceObject[this.labelKey];
             }
-            
+
             if(this._doCollapse) {
-                if (this._step === 0) {                    
+                if (this._step === 0) {
                     this.collapser.style.height = this.branchHeight;
                     this.collapser.style.position = "relative";
                     this.collapser.style.overflow = 'hidden';
@@ -111,15 +136,15 @@ var Branch = exports.Branch = Montage.create(TreeNode, {
                 }
             } else if(this._doExpand) {
                 this.collapser.style.height = this.branchHeight;
-                
+
                 this._doExpand = false;
             }
             if(this._switchToAuto) {
                 this.collapser.childNodes[1].style.position = 'static';
-                this.collapser.style.height = 'auto';                    
+                this.collapser.style.height = 'auto';
                 this._switchToAuto = false;
             }
-            
+
             if(this._removeTransition) {
                 this.collapser.classList.remove(this.collapseClass);
                 this._removeTransition = false;
@@ -143,7 +168,7 @@ var Branch = exports.Branch = Montage.create(TreeNode, {
     },
     collapse : {
         value: function() {
-            this.needsDraw = this._doCollapse = true;            
+            this.needsDraw = this._doCollapse = true;
         }
     },
     branchHeight: {

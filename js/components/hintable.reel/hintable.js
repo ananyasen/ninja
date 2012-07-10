@@ -1,8 +1,33 @@
 /* <copyright>
- This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
- No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
- (c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
- </copyright> */
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+</copyright> */
 
 /* ComputedStyleSubPanel.js */
 var Montage   = require("montage").Montage,
@@ -16,7 +41,7 @@ EDITABLE - Methods
 - startEdit
 - stopEdit
 - value
-- 
+-
 - _suggest
 - _suggestNext
 - _suggestPrev
@@ -32,7 +57,7 @@ exports.Hintable = Montage.create(Editable, {
     inheritsFrom : { value : Editable },
     _matchIndex  : { value : 0 },
     matches      : { value : [] },
-    
+
     _hint : { value : null },
     hint : {
         get : function() {
@@ -40,7 +65,7 @@ exports.Hintable = Montage.create(Editable, {
         },
         set : function(hint) {
             hint = hint || '';
-            
+
             ///// Set the hint element's text
             this._getFirstTextNode(this.hintElement).textContent = hint;
             ///// if hintElement was removed from the DOM, the object still
@@ -52,14 +77,14 @@ exports.Hintable = Montage.create(Editable, {
             this._hint = hint;
         }
     },
-    
+
     _hintElement : { value : null },
     hintElement : {
         get : function() {
             if(!this._hintElement) {
-                /// Remove the phantom "<BR>" element that is generated when 
+                /// Remove the phantom "<BR>" element that is generated when
                 /// content editable element is empty
-                this._children(this._element, function(item) { 
+                this._children(this._element, function(item) {
                     return item.nodeName === 'BR';
                 }).forEach(function(item) {
                     this._element.removeChild(item);
@@ -67,17 +92,17 @@ exports.Hintable = Montage.create(Editable, {
 
                 this._hintElement = document.createElement('span');
                 this._hintElement.classList.add(this.hintClass);
-                
+
                 this._element.appendChild(this._hintElement);
             }
-            
+
             return this._hintElement;
         },
         set : function(el) {
             this._hintElement = el;
         }
     },
-    
+
     _getHintDifference : {
         value : function() {
             if(!this.matches[this._matchIndex]) {
@@ -86,12 +111,12 @@ exports.Hintable = Montage.create(Editable, {
             return this.matches[this._matchIndex].substr(this.value.length);
         }
     },
-    
+
     hintNext : {
         value : function(e) {
             if(e) { e.preventDefault(); }
                 //console.log('next1');
-            
+
             if(this._matchIndex < this.matches.length - 1) {
                 //console.log('next');
                 ++this._matchIndex;
@@ -119,7 +144,7 @@ exports.Hintable = Montage.create(Editable, {
             var fullText = this._hint;
             this.hint = null;
             this.value += fullText;
-            
+
             if(!preserveCaretPosition) {
                 this.setCursor('end');
             }
@@ -130,13 +155,13 @@ exports.Hintable = Montage.create(Editable, {
     revert : {
         value : function(e, forceRevert) {
             this.hint = null;
-            
+
             if(this.isEditable || forceRevert) {
                 /// revert to old value
                 this.value = (this._preEditValue);
                 this._sendEvent('revert');
                 //console.log('reverting');
-                
+
             }
         }
     },
@@ -145,30 +170,30 @@ exports.Hintable = Montage.create(Editable, {
         value : function handleKeydown(e) {
             var k = e.keyCode,
                 isCaretAtEnd, selection, text;
-                
+
             this._super(arguments);
-            
-			/// Remove the phantom "<BR>" element that is generated when 
-			/// content editable element is empty
-			this._children(this._element, function(item) { 
-			    return item.nodeName === 'BR';
-			}).forEach(function(item) {
-			    this._element.removeChild(item);
-			}, this);
-            
+
+            /// Remove the phantom "<BR>" element that is generated when
+            /// content editable element is empty
+            this._children(this._element, function(item) {
+                return item.nodeName === 'BR';
+            }).forEach(function(item) {
+                this._element.removeChild(item);
+            }, this);
+
             if(k === 39) {
                 selection = window.getSelection();
                 text = selection.baseNode.textContent;
                 isCaretAtEnd = (selection.anchorOffset === text.length);
             }
-            
+
             if(this.hint && isCaretAtEnd) {
                 ///// Advance the cursor
                 this.hint = this.hint.substr(0, 1);
                 this.accept(e);
                 this.handleInput();
             }
-            
+
             this._execKeyAction(e);
         }
     },
@@ -184,25 +209,25 @@ exports.Hintable = Montage.create(Editable, {
             if(this.hints && this.hints.length) {
 
                 if(val.length > 0) { // content is not empty
-                    
-                    this._matchIndex = 0;                    
+
+                    this._matchIndex = 0;
                     this.matches = this.hints.filter(function(h) {
                         if(!h) { return false; }
                         return h.indexOf(val) === 0;
                     }).sort();
-                    
+
                     ///// If there are no matches, or the new value doesn't match all the
                     ///// previous matches, then get new list of matches
                     if(!this.matches.length || !this._matchesAll(val)) {
                     }
-                    
+
                     if(this.matches.length) { // match(es) found
                         if(this.matches[this._matchIndex] !== val) {
                             // Suggest the matched hint, subtracting the typed-in string
                             // Only if the hint is not was the user has typed already
                             this.hint = this._getHintDifference();
                         } else {
-                            this.hint = null;                            
+                            this.hint = null;
                         }
                     } else { // no matches found
                         this.hint = null;
@@ -230,7 +255,7 @@ exports.Hintable = Montage.create(Editable, {
         value : function(e) {
             var key = e.keyCode,
                 keys = this.keyActions;
-            
+
             if(this.hint) {
                 if( keys.hint.revert.indexOf(key) !== -1 ) { this.revert(e); }
                 if( keys.hint.accept.indexOf(key) !== -1 ) { this.accept(e); }
@@ -247,9 +272,9 @@ exports.Hintable = Montage.create(Editable, {
             }
         }
     },
-    
+
     /* --------------- Utils --------------- */
-    
+
     _children : {
         value : function(el, filter) {
             var f = filter || function(item) {
@@ -277,7 +302,7 @@ exports.Hintable = Montage.create(Editable, {
     hintClass : {
         value : "hintable-hint"
     },
-    keyActions : { 
+    keyActions : {
         value : {
             hint : {
                 accept : [9,13,186], // accept hint
@@ -297,5 +322,5 @@ exports.Hintable = Montage.create(Editable, {
         },
         distinct: true
     }
-    
+
 });

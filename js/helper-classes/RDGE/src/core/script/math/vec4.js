@@ -1,18 +1,43 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
 /**
 * RDGE.vec4 = {}
-* This library contains functions for operating on 4D vectors. Any JS array 
-* containing at least 4 numeric components can represent a 4D vector. 
+* This library contains functions for operating on 4D vectors. Any JS array
+* containing at least 4 numeric components can represent a 4D vector.
 *
 * For example, all of these are valid RDGE.vec4 declarations:
-*		var a = [0, 0, 0, 1];
-*		var b = RDGE.RDGE.vec4.identity();
-*		var c = RDGE.RDGE.vec4.zero();
+*       var a = [0, 0, 0, 1];
+*       var b = RDGE.RDGE.vec4.identity();
+*       var c = RDGE.RDGE.vec4.zero();
 *
 */
 var RDGE = RDGE || {};
@@ -115,9 +140,9 @@ RDGE.vec4.random = function (min, max) {
 */
 RDGE.vec4.add = function (a, b) {
     return [a[0] + b[0],
-				a[1] + b[1],
-				a[2] + b[2],
-				a[3] + b[3]];
+                a[1] + b[1],
+                a[2] + b[2],
+                a[3] + b[3]];
 };
 
 /**
@@ -125,9 +150,9 @@ RDGE.vec4.add = function (a, b) {
 */
 RDGE.vec4.sub = function (a, b) {
     return [a[0] - b[0],
-				a[1] - b[1],
-				a[2] - b[2],
-				a[3] - b[3]];
+                a[1] - b[1],
+                a[2] - b[2],
+                a[3] - b[3]];
 };
 
 /**
@@ -135,9 +160,9 @@ RDGE.vec4.sub = function (a, b) {
 */
 RDGE.vec4.mul = function (a, b) {
     return [a[0] * b[0],
-				a[1] * b[1],
-				a[2] * b[2],
-				a[3] * b[3]];
+                a[1] * b[1],
+                a[2] * b[2],
+                a[3] * b[3]];
 };
 
 /**
@@ -193,9 +218,9 @@ RDGE.vec4.normalize = function (v) {
 */
 RDGE.vec4.lengthSq = function (v) {
     return v[0] * v[0] +
-			v[1] * v[1] +
-			v[2] * v[2] +
-			v[3] * v[3];
+            v[1] * v[1] +
+            v[2] * v[2] +
+            v[3] * v[3];
 };
 
 /**
@@ -203,9 +228,9 @@ RDGE.vec4.lengthSq = function (v) {
 */
 RDGE.vec4.length = function (v) {
     return Math.sqrt(v[0] * v[0] +
-						v[1] * v[1] +
-						v[2] * v[2] +
-						v[3] * v[3]);
+                        v[1] * v[1] +
+                        v[2] * v[2] +
+                        v[3] * v[3]);
 };
 
 /**
@@ -251,9 +276,9 @@ RDGE.vec4.equal = function (a, b, t) {
 */
 RDGE.vec4.lerp = function (a, b, t) {
     return [
-		a[0] + (b[0] - a[0]) * t,
-		a[1] + (b[1] - a[1]) * t,
-		a[2] + (b[2] - a[2]) * t,
-		a[3] + (b[3] - a[3]) * t
-	];
+        a[0] + (b[0] - a[0]) * t,
+        a[1] + (b[1] - a[1]) * t,
+        a[2] + (b[2] - a[2]) * t,
+        a[3] + (b[3] - a[3]) * t
+    ];
 };

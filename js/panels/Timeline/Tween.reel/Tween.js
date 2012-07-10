@@ -1,8 +1,33 @@
 /* <copyright>
- This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
- No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
- (c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
- </copyright> */
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+</copyright> */
 
 var Montage = require("montage/core/core").Montage;
 var Component = require("montage/ui/component").Component;
@@ -141,38 +166,38 @@ var Tween = exports.Tween = Montage.create(Component, {
             this._isTweenAnimated = value;
         }
     },
-    
+
     _isDragging: {
-    	value: false
+        value: false
     },
     isDragging: {
-    	serializable: true,
+        serializable: true,
         get:function () {
             return this._isDragging;
         },
         set:function (newVal) {
             this._isDragging = newVal;
         }
-    	
+
     },
-    
+
     _easing: {
-    	value: "none"
+        value: "none"
     },
     easing: {
-    	serializable: true,
+        serializable: true,
         get:function () {
             return this._easing;
         },
         set:function (newVal) {
             this._easing = newVal;
         }
-    	
+
     },
 
     draw:{
         value:function () {
-        	this.tweenspan.element.style.width = this.spanWidth + "px";
+            this.tweenspan.element.style.width = this.spanWidth + "px";
             this.keyframe.element.style.left = (this.spanWidth -5) + "px";
             this.tweenspan.spanWidth = this.spanWidth;
             this.element.style.left = this.spanPosition + "px";
@@ -201,7 +226,7 @@ var Tween = exports.Tween = Montage.create(Component, {
     handleElementChange:{
         value:function (event) {
             // temp - testing var
-        	var useAbsolute = true;
+            var useAbsolute = true;
 
             if(event.detail.type === "cssChange"){
                 event.detail.source="cssPanelChange"
@@ -226,32 +251,32 @@ var Tween = exports.Tween = Montage.create(Component, {
     setTweenProperties:{
         value:function (eventDetail) {
 
-        	if (eventDetail.source === "SelectionTool" || eventDetail.source === "timeline" || eventDetail.source === "pi" || eventDetail.source === "cssPanelChange") {
-	            if(this.parentComponent.parentComponent.animatedElement.offsetTop != this.tweenedProperties["top"]){
-	                this.tweenedProperties["top"] = this.parentComponent.parentComponent.animatedElement.offsetTop + "px";
-	            }
-	            if(this.parentComponent.parentComponent.animatedElement.offsetLeft != this.tweenedProperties["left"]){
-	                this.tweenedProperties["left"] = this.parentComponent.parentComponent.animatedElement.offsetLeft + "px";
-	            }
-	            if (this.parentComponent.parentComponent.animatedElement.offsetWidth != this.tweenedProperties["width"]){
-	                this.tweenedProperties["width"] = this.parentComponent.parentComponent.animatedElement.offsetWidth + "px";
-	            }
-	            if (this.parentComponent.parentComponent.animatedElement.offsetHeight != this.tweenedProperties["height"]){
-	                this.tweenedProperties["height"] = this.parentComponent.parentComponent.animatedElement.offsetHeight + "px";
-	            }
-	            // tell track to update css rule
-	            this.parentComponent.parentComponent.updateKeyframeRule();
-	            this.isTweenAnimated = true;
-        	}
-			
-			if (eventDetail.source === "translateTool") {
-        		var arrMat = eventDetail.data.value[0].properties.mat,
-        			strTweenProperty = "perspective(1400) matrix3d(" + arrMat.join() + ")";
-        		
-        		this.tweenedProperties["-webkit-transform"] = strTweenProperty;
-        		this.parentComponent.parentComponent.updateKeyframeRule();
-        		this.isTweenAnimated = true;
-        	}
+            if (eventDetail.source === "SelectionTool" || eventDetail.source === "timeline" || eventDetail.source === "pi" || eventDetail.source === "cssPanelChange") {
+                if(this.parentComponent.parentComponent.animatedElement.offsetTop != this.tweenedProperties["top"]){
+                    this.tweenedProperties["top"] = this.parentComponent.parentComponent.animatedElement.offsetTop + "px";
+                }
+                if(this.parentComponent.parentComponent.animatedElement.offsetLeft != this.tweenedProperties["left"]){
+                    this.tweenedProperties["left"] = this.parentComponent.parentComponent.animatedElement.offsetLeft + "px";
+                }
+                if (this.parentComponent.parentComponent.animatedElement.offsetWidth != this.tweenedProperties["width"]){
+                    this.tweenedProperties["width"] = this.parentComponent.parentComponent.animatedElement.offsetWidth + "px";
+                }
+                if (this.parentComponent.parentComponent.animatedElement.offsetHeight != this.tweenedProperties["height"]){
+                    this.tweenedProperties["height"] = this.parentComponent.parentComponent.animatedElement.offsetHeight + "px";
+                }
+                // tell track to update css rule
+                this.parentComponent.parentComponent.updateKeyframeRule();
+                this.isTweenAnimated = true;
+            }
+
+            if (eventDetail.source === "translateTool") {
+                var arrMat = eventDetail.data.value[0].properties.mat,
+                    strTweenProperty = "perspective(1400) matrix3d(" + arrMat.join() + ")";
+
+                this.tweenedProperties["-webkit-transform"] = strTweenProperty;
+                this.parentComponent.parentComponent.updateKeyframeRule();
+                this.isTweenAnimated = true;
+            }
         }
     },
 

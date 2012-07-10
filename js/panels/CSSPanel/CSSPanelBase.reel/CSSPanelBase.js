@@ -1,7 +1,32 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
 var cssPropertyNameList      = require("js/panels/CSSPanel/css-property-name-list").CssPropertyNameList,
@@ -47,7 +72,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
 
             ///// Set up collapsible sub sections
             ['sheets', 'styles'].forEach(function(section) {
-                var s = section;                
+                var s = section;
                 self.sections[s].heading.addEventListener('click', function(e) {
                     self.toggleSectionCollapse(s);
                 }, false);
@@ -108,24 +133,24 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 contEl        = sect.container,
                 userDocName   = nj.getFileNameFromPath(sect.doc.defaultView.location.href),
                 self          = this;
-            
+
             ///// Set current document name in Stylesheets section header
             nj.empty(sect.docNameEl).appendChild(nj.textNode(' - ' + userDocName));
-            
+
             ///// LOOP through stylesheet list
             ///// -------------------------------------------------------
             sheetsArray.forEach(function(sheet, index) {
                 var isStageStyleSheet = (sheet.ownerNode.id === this._stageStyleSheetId),
                     isDefaultStyleSheet = (sheet.ownerNode.id === this._defaultStyleSheetId),
                     sheetObj;
-                    
+
                 if(!isStageStyleSheet) {
                     sheetObj = new NJStyleSheet(sheet, index);
                     if(isDefaultStyleSheet) {
                         sheetObj.isProtected = sheetObj.isCurrent = true;
                         this.currentStyleSheet = this.defaultStyleSheet = sheetObj;
-                    }                 
-                    
+                    }
+
                     //// Add Default stylesheet selection
                     sheetObj.sheetNameEl.addEventListener('click', function(e) {
                         //console.log('clicking sheet');
@@ -133,27 +158,27 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         //e.stopPropagation();
                         self.currentStyleSheet = sheetObj;
                     }, false);
-                    
+
                     sheetObj.deleteEl.addEventListener('click', function(e) {
                         if(sheetObj.isCurrent) {
                             self.defaultStyleSheet.makeCurrent();
                         }
                     }, false);
-                    
+
                     sheetObj.render(listEl);
                 }
 
-                
+
             }, this);
             ///// ________________________________________________________
-            
+
             ///// save height of content, and convert height from "auto" to pixels
             //sect.height = contEl.style.height = nj.height(contEl);
-            
-            
-            
+
+
+
             //contEl.style.webkitTransition = 'all 0.15s ease-out';
-            
+
         }
     },
     clearStyleSheetList : {
@@ -171,7 +196,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
             NJCSSStyle.prototype.onStyleChange.push(function() {
                 self._stageUpdate();
             });
-            
+
             ///// Add some NJEditable functionality
             NJEditable.prototype.onStartEdit.push(function(e) {
                 if(this.isSelector && this.el.nodeContent === 'element.style') {
@@ -180,7 +205,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 var njStyle = this.el.parentNode.njcssstyle;
                 // //console.log('added start edit');
                 this.el.parentNode.classList.add('nj-editing');
-                if(this.el.nodeName === "DD") {                    
+                if(this.el.nodeName === "DD") {
                     this.el.parentNode.classList.add('nj-editing-val'); // controls wrapping of text
                     if(cssCompletionMap[njStyle.property]) {
                         this.suggestions = cssCompletionMap[njStyle.property];
@@ -216,7 +241,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 }
 
                 ////console.log('NJEditable onStopEdit callback');
-                       
+
                 if(e && [9,13,186].indexOf(e._event.keyCode) !== -1) { // if the user is tabbing between styles
                     e.preventDefault();
                     sibling = (e._event.keyCode === 9 && e._event.shiftKey) ? ['previousSibling', 'lastChild'] : ['nextSibling', 'firstChild'];
@@ -226,9 +251,9 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         if(nextEl[sibling[0]]) {
                             nextEl = nextEl[sibling[0]];
                         } else {
-                            
+
                             if(!nextEl.parentNode[sibling[0]]) { // no next style element
-                                /// get njcssrule and create add button, 
+                                /// get njcssrule and create add button,
                                 /// and activate it if the new styles isn't dirtied
                                 // //console.log('reached the end');
                                 njStyle = nextEl.parentNode.njcssstyle;
@@ -245,8 +270,8 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                                 nextEl = false;
                                 break;
                             } else {
-                                nextEl = (nextEl.parentNode[sibling[0]]) ? 
-                                    nextEl.parentNode[sibling[0]][sibling[1]]: 
+                                nextEl = (nextEl.parentNode[sibling[0]]) ?
+                                    nextEl.parentNode[sibling[0]][sibling[1]]:
                                     nextEl.parentNode.parentNode[sibling[1]][sibling[1]];
                             }
                         }
@@ -275,14 +300,14 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         }
                     }
                 }
-                                
+
                 function isEditableNode(n) {
                     return n && n.nodeType === 1 && (n.nodeName === 'DT' || n.nodeName === 'DD');
                 }
             });
 
             NJEditable.prototype.onChange.push(_onEditableChange);
-            
+
             ///// Event delegation for editable nodes
             this.sections.styles.container.addEventListener('click', function(e) {
                 if(!this.njedit && (this.nodeName === 'DT' || this.nodeName === 'DD') && !self._inComputedStyleMode) {
@@ -290,22 +315,22 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         // //console.log('set up editable node!');
                         var edit = new NJEditable(this, null,  self.CSS_PROPERTY_NAMES); // TODO: window.propertyKeywords);
                         edit.startEditable();
-                    }                    
+                    }
                 }
             }, false);
-            
+
             function _onEditableChange(val, oldVal) {
                 if(this.isSelector) {
                     ////console.log('selector val = ' + val);
                     return false;
                 }
-                
+
                 var parent   = this.el.parentNode,
                     oldValue = oldVal,
                     edit     = this,
                     style, propName, propVal, isNewStyle, modifyCommand;
 
-                ///// Find NJCSSRule corresponding to this NJEditable element 
+                ///// Find NJCSSRule corresponding to this NJEditable element
                 ///// (the style container has reference to NJCSSStyle object)
                 while (!style) {
                     if(parent.njcssstyle) {
@@ -317,13 +342,13 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
 
                 // //console.log("Found style obj!");
                 // //console.log(style);
-                
+
                 isNewStyle = style.isNewStyle;
-                
+
                 //// remove semi-colons
                 val = val.trim().replace(';','');
                 this.val(val);
-                
+
                 ///// set up command for undo/redo
                 modifyCommand = Object.create(Object.prototype, {
                     description: { value: "Style Change" },
@@ -345,7 +370,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         }
                     }
                 });
-                
+
                 ///// is this an edit to the prop or val?
                 if(this.el.nodeName === 'DT') {
                     //// property name was edited
@@ -356,7 +381,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         ///// let the remove method take care of Undo/Redo
                         style.updateProperty(val);
                     }
-                    
+
                 } else if (this.el.nodeName === 'DD') {
                     //// property value was edited
                     if(!style.updateValue(val, isNewStyle)) {
@@ -405,12 +430,12 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
         value: function() {
             var self = this,
                 command;
-            
+
             this.sections.sheets.addSheetEl.addEventListener('click', function(e) {
                 var doc = self.sections.sheets.doc,
-                    handleRemoval, 
+                    handleRemoval,
                     njSheet;
-                    
+
                 handleRemoval = function(njSheet) {
                     if(njSheet.isCurrent) {
                         self.currentStyleSheet = self.defaultStyleSheet;
@@ -419,7 +444,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         self._currentRuleList.update();
                     }
                 };
-                
+
                 var rec = {
                     addSheet : function() {
                         ////console.log('Add Sheet');
@@ -445,7 +470,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         njSheet.remove();
                     }
                 };
-                
+
                 command = Object.create(Object.prototype, {
                     description: { value: "Add Stylehsset" },
                     receiver: { value: rec },
@@ -467,14 +492,14 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 NJevent("sendToUndo", command);
 
             });
-            
+
             this.sections.styles.addRuleEl.addEventListener('click', function(e) {
                 var selectorText, addRuleCommand, newNJRule;
-                
+
                 e.preventDefault();
-                
+
                 selectorText = (self._inMultiSelectMode) ? self._userContentContainerId + ' .newClass' : null;
-                
+
                 addRuleCommand = Object.create(Object.prototype, {
                     description: { value: "Add Rule" },
                     //receiver: { value: rec },
@@ -490,9 +515,9 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                             ////console.log('unexecute');
                             var list = self._currentRuleList,
                                 elements = (list.el.length) ? list.el : [list.el];
-                            
+
                             newNJRule.delete();
-                            
+
                             if(list.addedClassName) {
                                 elements.forEach(function(el) {
                                     el.classList.remove(list.addedClassName);
@@ -501,22 +526,22 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                         }
                     }
                 });
-                
+
                 if(!self._currentStyleSheet) {
                     self.currentStyleSheet = self.createStyleSheet('Temp');
                 }
-                
+
                 self._currentStyleSheet.dirty();
-                
+
                 //self._currentRuleList.initNewRule(self._currentStyleSheet, selectorText);
                 addRuleCommand.execute();
                 NJevent("sendToUndo", addRuleCommand);
             }, false);
-            
+
             this.sections.styles.showComputedEl.addEventListener('click', function(e) {
                 var computedStyleList;
                 e.preventDefault();
-                self.inComputedStyleMode = !self.inComputedStyleMode;                
+                self.inComputedStyleMode = !self.inComputedStyleMode;
             });
         }
     },
@@ -526,15 +551,15 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
             var items = this.application.ninja.selectedElements,
                 itemIndex = -1,
                 currentEl, currentRuleList, nextEl, nextRuleList, commonRules;
-                
+
             if(items.length > 1) {
-                this.clearCSSRules();                
+                this.clearCSSRules();
                 this._inMultiSelectMode = true;
                 this.inComputedStyleMode = false; // No computed styles mode for multiple items
-                
+
                 ///// if multiple items are selected, then show common rules
                 var elements = Array.prototype.slice.call(this.application.ninja.selectedElements, 0);
-                
+
                 ///// show toolbar, but hide computed style button
                 this.sections.styles.toolbar.style.display = '';
                 this.sections.styles.showComputedEl.classList.add('nj-css-panel-hide');// .style.display = 'none';
@@ -542,7 +567,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 this.sections.styles.statusMsg.classList.remove('nj-css-panel-hide');
                 nj.empty(this.sections.styles.numItemsEl).appendChild(nj.textNode(items.length));
                 this._currentRuleList.render(this.sections.styles.container);
-                                
+
             } else if(items.length === 1) {
                 //console.log('Selection change: One element selected');
                 this._inMultiSelectMode = false;
@@ -558,7 +583,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 this.computedStyleSubPanel.hide();
                 this.clearCSSRules();
             }
-            
+
         }
     },
     captureElementChange:{
@@ -579,7 +604,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                     // TODO: Need a way of identifying the changing CSS rule (Stylesheet Manager)
                     ////console.log('could not find njStyleSheet');
                 }
-            } else if(event._event.eventType === 'style' && items.length === 1) {                
+            } else if(event._event.eventType === 'style' && items.length === 1) {
                 this.showStylesForElement(this.sections.styles.currentEl, event._event.data);
             }
         }
@@ -606,7 +631,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
         },
         set: function(njStyleSheet) {
             if(this._currentStyleSheet) {
-                this._currentStyleSheet.unMakeCurrent();                    
+                this._currentStyleSheet.unMakeCurrent();
             }
             njStyleSheet.makeCurrent();
             this._currentStyleSheet = njStyleSheet;
@@ -632,7 +657,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
         set : function(turnOn) {
             var btnOnClass = 'nj-css-computed-on',
                 hideClass  = 'nj-css-panel-hide';
-            
+
             if(turnOn) {
                 ///// Turn ON computed style mode
                 //console.log('Turning ON computed style mode');
@@ -649,7 +674,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 this.sections.styles.addRuleEl.classList.remove(hideClass);
                 this.sections.styles.showComputedEl.parentNode.classList.remove(btnOnClass);
             }
-            
+
             this._inComputedStyleMode = turnOn;
         }
     },
@@ -657,22 +682,22 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
         value : function(title) {
             var listEl = this.sections.sheets.listEl,
                 sheet, njSheet;
-            
+
             title = title || '';
-            
-            sheet = nj.make('style', { 
+
+            sheet = nj.make('style', {
                 type : 'text/css',
                 id   : title,
                 media : 'screen',
                 title : 'Temp'
             });
-            
+
             this.sections.sheets.doc.head.appendChild(this.sections.sheets.doc.createComment('User-added stylesheet number ' + title));
             this.sections.sheets.doc.head.appendChild(sheet);
-            
+
             njSheet = new NJStyleSheet(sheet.sheet, title); // TODO: Fix index
             njSheet.render(listEl);
-            
+
             return njSheet;
         }
     },
@@ -696,13 +721,13 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 // or, use combined class
 //                identifier += '.' + el.className.trim().replace(' ', '.');
             }
-            
+
             this.clearCSSRules(); ///// Clear css styles subsection
-            
+
             ///// set new element name in header
             //nj.empty(elNameEl);
             elNameEl.appendChild(nj.textNode(' - ' + identifier));
-            
+
             if(el.njcssrulelist) {
                 ///// use the existing NJCSSRuleList object
 //                // //console.log('user existing njcssrulelist object');
@@ -717,7 +742,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 // Render rule list (pass in container)
                 njRuleList.render(contEl);
             }
-            
+
             if(this._inComputedStyleMode) {
                 ////console.log('in computed style mode');
                 this.computedStyleSubPanel.declaration = el;
@@ -726,13 +751,13 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
             } else {
                 this.computedStyleSubPanel.hide();
             }
-            
-            
+
+
             ///// set height to "" (empty) to capture computed height and remove transition
             contEl.style.webkitTransition = '';
             contEl.style.height = '';
             computedHeight = nj.height(contEl);
-            
+
             //// re-apply transition
             sect.height = contEl.style.height = 'auto';
             //contEl.style.webkitTransition = 'all 0.15s ease-out';
@@ -745,7 +770,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 this._currentRuleList.hide();
             }
             nj.empty(this.sections.styles.elNameEl);
-            
+
         }
     },
     _stageUpdate : {
@@ -759,7 +784,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
         value: function(section) {
             var isClosed = this.sections[section].collapsed,
                 action = (isClosed) ? 'expandSection' : 'collapseSection';
-            
+
             this[action](section).collapsed = !isClosed;
         }
     },
@@ -769,7 +794,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 contEl   = section.container,
                 arrow    = section.arrow,
                 cssClass = 'closed';
-                
+
             if(sect === 'styles' && this._inComputedStyleMode) {
                 contEl = this.computedStyleSubPanel.element;
             }
@@ -787,7 +812,7 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
             contEl.style.height = '0px';
 
             section.toolbar.classList.add('nj-css-panel-hide');
-            
+
             return section;
         }
     },
@@ -797,13 +822,13 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 contEl = section.container,
                 arrow    = section.arrow,
                 cssClass = 'closed';
-                
+
             contEl.style.webkitTransition = 'height 0.15s ease-out';
             arrow.className  = arrow.className.replace(cssClass, '').trim();
             contEl.className = contEl.className.replace(cssClass, '').trim(); // controls non-height transitions
             //console.log('section height: ' + section.height);
             contEl.style.height = section.height;
-            
+
             contEl.addEventListener('webkitTransitionEnd', function njExpando(e) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -811,9 +836,9 @@ var CSSPanel = exports.CSSPanelBase = (require("montage/core/core").Montage).cre
                 this.style.height = 'auto';
                 this.removeEventListener('webkitTransitionEnd', njExpando, false);
             }, false);
-            
+
             section.toolbar.classList.remove('nj-css-panel-hide');
-            
+
             return section;
         }
     },
@@ -870,15 +895,15 @@ function NJCSSRuleList(el, cssPanel) {
     this.commonRules = null;
     this.inlineStyleRule = null;
     this.addedClassName = null;
-    
+
     var self = this,
         styleAttrRule;
-    
+
     if(el instanceof Array) {
         this.rules = this.getCommonRules();
     } else {
         styleAttrRule = el.style;
-        
+
         el.njcssrulelist = this;
         styleAttrRule.isInlineStyle = true;
         this.computed = el.ownerDocument.defaultView.getComputedStyle(el);
@@ -890,15 +915,15 @@ function NJCSSRuleList(el, cssPanel) {
             parentStyleSheet : 'Inline Style',
             style            : styleAttrRule
         });
-        
+
     }
-    
+
 }
 
 NJCSSRuleList.prototype.getCommonRules = function() {
     var itemIndex = -1,
         currentEl, currentRuleList, nextEl, nextRuleList, commonRules;
-    
+
     do {
         ///// Get current element's matched rules
         currentEl = this.el[++itemIndex];
@@ -913,9 +938,9 @@ NJCSSRuleList.prototype.getCommonRules = function() {
         commonRules = currentRuleList.filter(function(rule) {
             return nextRuleList.indexOf(rule) !== -1;
         });
-        
+
     } while (itemIndex+2 < this.el.length && commonRules.length > 0);
-    
+
     //console.log('Selection change: ' + commonRules.length + ' common rule(s)');
     this.commonRules = commonRules;
     return commonRules;
@@ -929,9 +954,9 @@ NJCSSRuleList.prototype.update = function(updateList) {
     } else {
         matchedRules = this.cssPanel.getAllRelatedRules(this.el)
     }
-    
+
     this.inlineStyleRule.update(updateList);
-    
+
     ///// Update NEW and CHANGED rules
     matchedRules.forEach(function(rule, index) {
         var njRule = rule.njcssrule;
@@ -966,7 +991,7 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
         index        = sheet.rules.length,
         self         = this,
         rule, njRule, selector, height, padTop, padBot, intervalId, stopKeys;
-    
+
     //// Derive default selector
     if(selectorName) {
         selectorText = selectorName;
@@ -975,7 +1000,7 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
     } else if(this.el.classList.length > 0) {
         selectorText += '.' + this.el.classList[0];
     }
-    
+
     //// Insert new rule, and create NJCSSRule by passing reference to rule
     sheet.insertRule(selectorText + ' { }', index);
     rule = sheet.rules.item(index);
@@ -987,7 +1012,7 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
 
     njRule.container.classList.add('nj-get-height');
     this.container.appendChild(njRule.container);
-        
+
     // Slide-in new rule from bottom of viewport
     ///// Calculate height;
     height = nj.height(njRule.container);
@@ -995,12 +1020,12 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
     padBot = njRule.container.ownerDocument.defaultView.getComputedStyle(njRule.container).getProperty('paddingBottom');
     njRule.container.style.paddingTop = '0';
     njRule.container.style.paddingBottom = '0';
-    
+
     ///// Set height to zero, make visible, and apply transition
-    
+
     njRule.container.classList.add('nj-pre-slide');
     njRule.container.classList.remove('nj-get-height');
-    
+
     njRule.container.addEventListener('webkitTransitionEnd', function scroller() {
         //console.log('scroller end');
         clearInterval(intervalId);
@@ -1010,7 +1035,7 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
         self.cssPanel.scrollTo('bottom', self.container.parentNode);
         this.removeEventListener('webkitTransitionEnd', scroller, false);
     }, false);
-    
+
     ///// Apply new height;
     njRule.container.style.height = height;
     njRule.container.style.paddingTop = padTop;
@@ -1019,14 +1044,14 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
     intervalId = setInterval(function() {
         this.cssPanel.scrollTo('bottom', self.container.parentNode);
     }.bind(this), 5);
-    
+
     ///// Make selector editable, and attach selector specific event handling
     selector = njRule.selectorEditable;
-    
+
     ///// Remove ':' from key actions config
     stopKeys = selector.defaults.keyActions.noHint.stop;
     stopKeys.splice(stopKeys.indexOf(186), 1);
-    
+
     //console.log('NJCSSRuleList::initNewRule - attaching onStepEdit and onChange events');
     /*selector.onStopEdit = [function(e) {
         // TODO: Fix event management, rather than clobbering prototype
@@ -1042,7 +1067,7 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
             } else {
                 propertyEl.njedit.startEditable();
             }
-            
+
         }
     }];*/
     if(this.cssPanel._inMultiSelectMode) {
@@ -1065,21 +1090,21 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
             njRule.delete();
             return;
         }
-        
+
         var elArray = [], doesApply;
         //console.log('NJCSSRuleList::initNewRule - on change event');
         njRule.rule.selectorText = val;
-        
+
         if(self.el.length) {
             elArray = self.el;
         } else {
             elArray.push(self.el);
         }
-        
+
         doesApply = elArray.every(function(item, index, arr) {
             return njRule.appliesToElement(item);
         });
-        
+
         if(doesApply) {
             ///// Success - selector change applies to element
             if(njRule.shownAsUnapplied) {
@@ -1092,7 +1117,7 @@ NJCSSRuleList.prototype.initNewRule = function(njStyleSheet, selectorName) {
         // //console.log('selector text is now: ' + njRule.rule.selectorText);
     }];
     selector.startEditable();
-    
+
     return njRule;
 };
 
@@ -1109,14 +1134,14 @@ NJCSSRuleList.prototype.render = function(parent) {
         this.rules.forEach(function(rule) {
             var njcssrule = new NJCSSRule(rule, this);
             this.njRules.push(njcssrule);
-            
+
             if(rule.style.isInlineStyle) {
                 this.inlineStyleRule = njcssrule;
             }
-            
+
             this.container.appendChild(njcssrule.container);
         }, this);
-        
+
         //// append list to parent container
         parent.appendChild(this.container);
     }
@@ -1147,7 +1172,7 @@ NJCSSRuleList.prototype.show = function() {
 function NJCSSRule(rule, njRuleList) {
     var els  = this.defaults.elements,
         self = this;
-        
+
     this.rule             = rule;
     this.njRuleList       = njRuleList;
     this.declaration      = rule.style;
@@ -1159,18 +1184,18 @@ function NJCSSRule(rule, njRuleList) {
     this.shownAsUnapplied = false;
     this.addButton        = null;
     this.selectorEditable = null;
-    
+
     ///// Create selector, link, and containers
     ['container', 'sheetLink', 'selector', 'listContainer'].forEach(function(el) {
         self[el] = nj.make(els[el].tag, els[el].attr);
     });
-    
+
     ///// Add reference to CSSRule to container element
     this.container.rule = rule;
-    
+
     ///// Add reference of self to host CSSRule object
     rule.njcssrule = this;
-    
+
     ///// Populate selector, sheetLink elements
     this.selector.appendChild(nj.textNode(rule.selectorText));
     if(this.njStyleSheet) {
@@ -1213,7 +1238,7 @@ function NJCSSRule(rule, njRuleList) {
         }];
     }
     this.createStyles();
-    
+
     ///// sort list and render sorted list to page
     Object.keys(this.styles).sort().forEach(function(style) {
         // //console.log('Style property: ' + style);
@@ -1221,7 +1246,7 @@ function NJCSSRule(rule, njRuleList) {
     });
     ////console.log('NJCSSRule::constructor - creating Add button');
     this.createAddButton();
-    
+
     ///// Add elements to container
     ['sheetLink', 'selector', 'listContainer'].forEach(function(el) {
         self.container.appendChild(self[el]);
@@ -1229,8 +1254,8 @@ function NJCSSRule(rule, njRuleList) {
 }
 
 NJCSSRule.prototype.createStyles = function() {
-    var self = this;    
-    
+    var self = this;
+
     nj.toArray(this.declaration).forEach(function(prop, index) {
         var style = new NJCSSStyle(self, index);
         self.styles[style.property] = style;
@@ -1244,7 +1269,7 @@ NJCSSRule.prototype.createAddButton = function() {
     var btn = this.addButton = new NJCSSStyle(this),
         self = this,
         propEditable, valuEditable;
-    
+
     ///// Create "Add" style btn
     btn.defaults.elements.itemWrapper.attr = 'nj-css-add-style nj-css-no-checkbox nj-css-no-error'; // classes to be added to the style container
     //btn.skipValueUpdateOnce = true; // don't show error until the user has tried to input value
@@ -1253,42 +1278,42 @@ NJCSSRule.prototype.createAddButton = function() {
 
     btn.propEl.addEventListener('click', addButtonClickHandler, false);
     btn.propEl.addEventListener('focus', addButtonClickHandler, false);
-    
+
     propEditable = new NJEditable(btn.propEl, null, self.njRuleList.cssPanel.CSS_PROPERTY_NAMES);
     valuEditable = new NJEditable(btn.valEl);
-    
+
     function removeAddButtonBehavior(btn) {
         //console.log('removing add button behavior');
         var propEdit = btn.propEl.njedit,
             valEdit  = btn.valEl.njedit;
-            
+
         [propEdit, valEdit].forEach(function(edit) {
             edit.onBlur.length = 0;
             edit.onRevert.length = 0;
         });
-        
+
         btn.container.classList.remove('nj-css-no-checkbox');
         btn.isNewStyle = false;
-        
+
         if(!propEdit.isDirty || !valEdit.isDirty) {
             btn.container.classList.add('nj-css-error');
         }
-        
+
         delete btn.activate;
-        
+
     }
-    
+
     function addButtonClickHandler(e) {
         var propEl       = this,
             valuEl       = valuEditable.el,
             container    = propEl.parentNode,
             propOnRevertIndex, valuOnRevertIndex;
-        
+
         if(e) { // event is undefined if calling this programmatically
             e.stopPropagation();
             e.preventDefault();
         }
-        
+
         // //console.log('Add btn click event');
         propEl.removeEventListener('click', addButtonClickHandler, false);
         propEl.removeEventListener('focus', addButtonClickHandler, false);
@@ -1309,7 +1334,7 @@ NJCSSRule.prototype.createAddButton = function() {
                         reCreateAddBtn();
                     }
                 }
-            });    
+            });
         }
 
         // //console.log('CreateAddButton:: adding onblur event to value field w/ namename: ' + valuEditable.el.nodeName);
@@ -1330,7 +1355,7 @@ NJCSSRule.prototype.createAddButton = function() {
                         reCreateAddBtn();
                     }
                 }
-            });    
+            });
         }
 
         propEditable.onRevert.push(reCreateAddBtn);
@@ -1356,29 +1381,29 @@ NJCSSRule.prototype.createAddButton = function() {
             ///// remove button/transition classes
             propEl.parentNode.classList.remove('trans');
             propEl.parentNode.classList.remove('nj-css-add-style');
-            
+
             ///// Add "clean" (not dirty) state to newly transformed editable objects
-            
+
             propEl.classList.add('nj-css-clean');
             propEditable.val('property');
             propEditable.onDirty.push(function() {
                 this.el.classList.remove('nj-css-clean');
             });
-            
+
             valuEl.classList.add('nj-css-clean');
             valuEditable.onDirty.push(function() {
                 this.el.classList.remove('nj-css-clean');
             });
-            
+
             propEditable.selectAll();
             this.removeEventListener('webkitTransitionEnd', trans, false);
             // //console.log('button transition end');
         }, false);
-        
+
         setTimeout(function() {
-            propEl.parentNode.classList.add('trans');    
+            propEl.parentNode.classList.add('trans');
         }, 10);
-        
+
     }
     // add non-event-based hook (used for programmatically transforming to new style)
     btn.activate = addButtonClickHandler;
@@ -1399,23 +1424,23 @@ NJCSSRule.prototype.update = function(updateList) {
             removedStyles = [],
             useUpdateList = false,
             shorthand, index;
-            
-            
+
+
         /// Only use update list if left and/or top, for now.
         if(updateList) {
             useUpdateList = updateList.every(function(obj) {
                 return (obj.style === 'left' || obj.style === 'top');
             }, this);
         }
-        
+
         if(useUpdateList) {
             iterateList = updateList;
         }
-            
+
         //// loop through styles in host rule object or provided style array
         iterateList.forEach(function(prop, index) {
             var currentValue, oldValue, newStyle, propName;
-            
+
             if(updateList && useUpdateList) {
                 currentValue = prop.value;
                 propName = prop.style;
@@ -1426,7 +1451,7 @@ NJCSSRule.prototype.update = function(updateList) {
                 currentValue = NJCSSStyle.roundUnits(this.rule.style.getPropertyValue(prop));
                 propName = prop;
             }
-            
+
             if(this.styles.hasOwnProperty(propName)) { ///// if the property was already defined
                 oldValue = this.styles[propName].value;
                 ///// if the value doesn't match saved value, update text
@@ -1445,7 +1470,7 @@ NJCSSRule.prototype.update = function(updateList) {
                     if(!shorthand) {
                         newStyle = new NJCSSStyle(this, index);
                         this.styles[newStyle.property] = newStyle;
-                
+
                         ///// find index of new style (listed alphabetically)
                         index = Object.keys(this.styles).sort().indexOf(newStyle.property);
                         ///// pass the index to insert style in right spot (uses insertBefore)
@@ -1457,9 +1482,9 @@ NJCSSRule.prototype.update = function(updateList) {
                     // //console.log('index not foudn');
                 }
             }
-            
+
         }, this);
-        
+
         if(!updateList) {
             ///// Remove styles that are no longer defined in rule
             Object.keys(self.styles).forEach(function(style) {
@@ -1468,19 +1493,19 @@ NJCSSRule.prototype.update = function(updateList) {
                 }
             });
         }
-        
-    }    
+
+    }
 };
 
 NJCSSRule.prototype.getShorthandStylePresent = function(property) {
     ///// Get list of shorthand properties for this property name
     var shorthands = CSS_SHORTHAND_MAP[property], i, shorthand;
-    
+
     ///// If the list does not exist, then there is no shorthand for this
     if(!shorthands) {
         return false;
     }
-    
+
     ///// There may be multiple shorthands, for example:
     ///// (background-position-x has background-position, and background)
     ///// If any match an existing style in our list of styles, return true
@@ -1491,12 +1516,12 @@ NJCSSRule.prototype.getShorthandStylePresent = function(property) {
             return this.styles[shorthand];
         }
     }
-    
+
     return false;
 };
 NJCSSRule.prototype.areAllRulesDisabled = function() {
     var allProperties = Object.keys(this.styles);
-    
+
     return allProperties.every(function(name) {
         //// check to see if style object is disabled
         return this.styles[name].disabled;
@@ -1510,7 +1535,7 @@ NJCSSRule.prototype.delete = function(UICleanUp) {
         //console.log('Delete prevented - all rules are disabled');
         return false;
     }
-    
+
     var ruleList = this.njRuleList,
         cssText = this.rule.cssText,
         self = this,
@@ -1560,7 +1585,7 @@ NJCSSRule.prototype.delete = function(UICleanUp) {
         selectorText : self.rule.selectorText,
         cssText : self.rule.style.cssText
     };
-    
+
     deleteCommand = Object.create(Object.prototype, {
         description: { value: "Delete Rule" },
         receiver : { value: receiver },
@@ -1576,15 +1601,15 @@ NJCSSRule.prototype.delete = function(UICleanUp) {
             }
         }
     });
-    
+
     if(UICleanUp) {
         receiver.doDelete();
     } else {
         deleteCommand.execute();
         NJevent("sendToUndo", deleteCommand);
-    } 
-    
-    
+    }
+
+
 };
 
 NJCSSRule.prototype.appliesToElement = function(el) {
@@ -1632,7 +1657,7 @@ NJCSSRule.prototype.hide = function() {
 };
 
 NJCSSRule.prototype.show = function() {
-    this.container.style.display = 'none';    
+    this.container.style.display = 'none';
 };
 
 NJCSSRule.prototype.defaults = {
@@ -1660,7 +1685,7 @@ function NJCSSStyle(njrule, index) {
     this.unapplied    = false;
     this.disabled     = false;
     this.isNewStyle   = false;
-    
+
     if(index >= 0) {
         this.property  = this.njRule.declaration.item(index);
         this.browserValue = this.njRule.declaration.getPropertyValue(this.property)
@@ -1673,7 +1698,7 @@ function NJCSSStyle(njrule, index) {
         this.property   = this.defaults.placeholderText.property;
         this.value      = this.defaults.placeholderText.value;
     }
-    
+
 }
 
 NJCSSStyle.roundUnits = function(cssValue) {
@@ -1709,22 +1734,22 @@ NJCSSStyle.prototype.render = function(cont, index) {
     var els      = this.defaults.elements,
         self     = this,
         priority = '';
-        
+
     if(this.priority) {
         priority = ' !important';
-    }    
+    }
     this.listCont  = cont;
     this.propEl    = nj.make(els.styleProperty.tag, els.styleProperty.attr);            /// create property el
     this.valEl     = nj.make(els.styleValue.tag, els.styleValue.attr + priority);    /// create value el
     this.toggleEl  = nj.make(els.toggler.tag, els.toggler.attr);
     this.container = nj.make(els.itemWrapper.tag, els.itemWrapper.attr);
-    
+
     ///// Add text to elements
     this.propEl.appendChild(nj.textNode(this.property));
     this.propEl.title = this.property;
     this.valEl.appendChild(nj.textNode(this.value));
     this.valEl.title = this.value;
-    
+
     //// disable style if checkbox is clicked
     this.toggleEl.addEventListener('click', function(e) {
         var action     = 'Disable',
@@ -1735,7 +1760,7 @@ NJCSSStyle.prototype.render = function(cont, index) {
             action     = 'Enable';
             undoAction = 'Disable';
         }
-        
+
         toggleCommand = Object.create(Object.prototype, {
             description: { value: action+" Style" },
             execute: {
@@ -1750,7 +1775,7 @@ NJCSSStyle.prototype.render = function(cont, index) {
                 }
             }
         });
-        
+
         toggleCommand.execute();
         NJevent("sendToUndo", toggleCommand);
     }, false);
@@ -1759,16 +1784,16 @@ NJCSSStyle.prototype.render = function(cont, index) {
     [this.toggleEl, this.propEl, this.valEl].forEach(function(el) {
         self.container.appendChild(el);
     });
-    
+
     this.container.njcssstyle = this; // attach reference to object
-    
+
     ///// if index is specified, insertBefore index
     if(typeof index === 'number') {
         cont.insertBefore(this.container, nj.toArray(cont.childNodes).filter(function(el) {
             return (el.nodeName && el.nodeName === 'DIV');
         })[index]);
     } else {
-        cont.appendChild(this.container);        
+        cont.appendChild(this.container);
     }
 
 };
@@ -1781,16 +1806,16 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
     }
 
     var IMPORTANT_FLAG = ' !important',
-        dec = this.njRule.declaration,        
+        dec = this.njRule.declaration,
         acceptAsValid = false,
         self = this,
         newUnits,
         browserVal,
         receiver;
-        
+
     ///// remove whitespace before unit substrings (e.g. "200 px")
     newValue = newValue.replace(/\s*(px|em|pt|in|cm|mm|ex|pc)/, "$1");
-    
+
     ///// re-append units if omitted
     newUnits = this.getUnits(newValue);
     if(this.units && parseInt(newValue) && newUnits === null) { // if units previously defined and could not derive new units
@@ -1798,7 +1823,7 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
     } else if(newValue !== '0') { // ignore if '0'
         this.units = newUnits;    // else, apply derived (or null) units
     }
-    
+
     ///// Did the user specify style priority?
     if(newValue.indexOf(IMPORTANT_FLAG) !== -1) {
         this.priority = 'important';
@@ -1807,31 +1832,31 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
     } else {
         this.priority = null;
     }
-    
+
     ///// Remove property for passive validation (sets it to null)
     dec.removeProperty(this.property);
-    
+
     ///// Use CSS declaration's setProperty()
     ///// method to apply/test the new value
     dec.setProperty(this.property, newValue, this.priority);
-    
+
     ///// Check to see if property was successfully set
     ///// by comparing to value after browser validation
     browserVal = dec.getPropertyValue(this.property);
-    
+
     //console.log('updating "' + this.property + '" to ' + newValue +
     //            '. Browser returns ' + browserVal +
     //            ' with priority : ' + dec.getPropertyPriority(this.property));
-    
+
     ////// TODO: find new place for this logic
     if(newValue === '0' && browserVal === '0px') {
         browserVal = '0';
     }
-    
+
     if (this.browserValidationExclusions[this.property]) {
         acceptAsValid = this.browserValidationExclusions[this.property](newValue, dec);
     }
-    
+
     receiver = {
         update : function(withValue) {
             var newVal = withValue || newValue;
@@ -1850,7 +1875,7 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
             }
             ///// Show modified stylesheet
             if(self.njRule.njStyleSheet) {
-                self.njRule.njStyleSheet.dirty();            
+                self.njRule.njStyleSheet.dirty();
             }
 
             if(self.unapplied) {
@@ -1858,14 +1883,14 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
                 self.removeError();
             }
             self.styleChange();
-            
+
         },
         revertUpdate : function() {
             this.update(this.previousValue);
         },
         previousValue : self.value
     };
-    
+
     var modifyCommand = Object.create(Object.prototype, {
         description: { value: "Style Change" },
         receiver: { value: receiver },
@@ -1884,7 +1909,7 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
             }
         }
     });
-    
+
     if(browserVal !== null || acceptAsValid) {
         if(bypassUndo) {
             receiver.update();
@@ -1892,7 +1917,7 @@ NJCSSStyle.prototype.updateValue = function(newValue, bypassUndo) {
             modifyCommand.execute();
             NJevent("sendToUndo", modifyCommand);
         }
-        
+
         return true;
     } else {
         ///// re-apply previous style property
@@ -1914,20 +1939,20 @@ NJCSSStyle.prototype.updateProperty = function(newProperty) {
         this.styleChange();
         return true;
     }
-    
+
     var dec = this.njRule.declaration, receiver;
-    
+
     dec.removeProperty(this.property);
     delete this.njRule.styles[this.property];
-    
+
     this.units = null;
     this.property = newProperty;
     this.propEl.title = newProperty;
     this.setPropertyText(newProperty);
-    
+
     //// update NJRule's copy of the css text
     this.njRule.cssText = this.njRule.rule.cssText;
-    
+
     if(this.updateValue(this.value, true)) {
         // //console.log('Updating property and value - worked!');
         this.njRule.styles[this.property] = this;
@@ -1936,11 +1961,11 @@ NJCSSStyle.prototype.updateProperty = function(newProperty) {
         this.addUnappliedStyle();
         this.showError();
     }
-    
+
     if(!this.container.parentNode) {
         this.reInsertStyleToDocument();
     }
-    
+
     /// TODO: if the value did change, update props
     //if(this.rule.style.getProp)
 };
@@ -1950,7 +1975,7 @@ NJCSSStyle.prototype.update = function() {
 
     this.njRule.cssText = this.njRule.rule.cssText;
     this.setValueText(browserVal);
-    
+
 };
 
 NJCSSStyle.prototype.setPropertyText = function(text) {
@@ -1970,15 +1995,15 @@ NJCSSStyle.prototype.setValueText = function(text) {
 NJCSSStyle.prototype.reInsertStyleToDocument = function() {
     /// Find style's index alphabetically
     var index = Object.keys(this.njRule.styles).sort().indexOf(this.property);
-    
+
     this.setPropertyText(this.property);
     this.setValueText(this.value);
-    
+
     this.listCont.insertBefore(this.container, nj.toArray(this.listCont.childNodes).filter(function(el) {
         return (el.nodeName && el.nodeName === 'DIV');
     })[index]);
     this.container.classList.remove('nj-css-panel-hide');
-    
+
 };
 
 NJCSSStyle.prototype.addUnappliedStyle = function() {
@@ -1989,7 +2014,7 @@ NJCSSStyle.prototype.addUnappliedStyle = function() {
 NJCSSStyle.prototype.removeUnappliedStyle = function() {
     var i = this.njRule.unappliedStyles.indexOf(this);
     this.unapplied = false;
-    this.njRule.unappliedStyles.splice(i, 1);        
+    this.njRule.unappliedStyles.splice(i, 1);
 };
 
 
@@ -2011,14 +2036,14 @@ NJCSSStyle.prototype.disable = function() {
     this.container.classList.add('nj-css-disabled');
     this.addUnappliedStyle();
     this.njRule.declaration.removeProperty(this.property);
-    
+
     //// update NJRule's copy of the css text
     this.njRule.cssText = this.njRule.rule.cssText;
-    
+
     ///// Show modified stylesheet
     if(this.njRule.njStyleSheet) {
         this.njRule.njStyleSheet.dirty();
-    }    
+    }
     this.styleChange();
     this.toggleEl.checked = false;
     this.toggleEl.title = 'Enable';
@@ -2033,7 +2058,7 @@ NJCSSStyle.prototype.enable = function() {
 
     //// update NJRule's copy of the css text
     this.njRule.cssText = this.njRule.rule.cssText;
-    
+
     ///// Show modified stylesheet
     this.njRule.njStyleSheet.unDirty();
     this.styleChange();
@@ -2043,7 +2068,7 @@ NJCSSStyle.prototype.enable = function() {
 
 NJCSSStyle.prototype.remove = function(preserveInDeclaration, bypassUndo) {
     var self = this,
-    
+
         receiver = {
             doRemove : function() {
                 //console.log('Delete Style');
@@ -2054,14 +2079,14 @@ NJCSSStyle.prototype.remove = function(preserveInDeclaration, bypassUndo) {
                 }.bind(self), 100);
                 if(!preserveInDeclaration) {
                     return self.njRule.declaration.removeProperty(self.property);
-                }                
+                }
             },
             undoRemove : function() {
                 self.updateValue(self.value, true);
-                self.reInsertStyleToDocument();                
+                self.reInsertStyleToDocument();
             }
         },
-    
+
         removeCommand = Object.create(Object.prototype, {
             description: { value: "Delete Style" },
             receiver : { value: receiver },
@@ -2078,7 +2103,7 @@ NJCSSStyle.prototype.remove = function(preserveInDeclaration, bypassUndo) {
                 }
             }
         });
-    
+
     if(bypassUndo) {
         receiver.doRemove();
     } else {
@@ -2155,7 +2180,7 @@ function NJEditable(element, text, autoSuggests, suppressDropDown) {
     } else {   /// or, get the original content of the element
         this.elTextNode = this.getFirstTextNode();
     }
-    
+
     this.defaults = {
         keyActions : {
             hint : {
@@ -2194,30 +2219,30 @@ function NJEditable(element, text, autoSuggests, suppressDropDown) {
             self.stopEditable();
         },*/
         keydown : function(e) {
-            var k = e.keyCode, 
+            var k = e.keyCode,
                 a = self.defaults.keyActions,
                 isCaretAtBeg, isCaretAtEnd, selection, text;
-            
+
             e.stopPropagation();
             ////console.log('keydown: ' + e.keyCode);
-            
+
             ///// Handle Undo
             if(checkForUndoRedo(e)) {
                 return false;
             }
-            
+
             if(k === 39) {
                 selection = window.getSelection();
                 text = selection.baseNode.textContent;
                 isCaretAtEnd = (selection.anchorOffset === text.length);
             }
-            
+
             ///// Required to prevent browser crash
             ///// (not sure why it can't handle the default behavior)
             if(isCaretAtEnd || isCaretAtBeg) {
                 e.preventDefault();
             }
-            
+
             if(self.hint) {
                 if(isCaretAtEnd) {
                     ///// Advance the cursor
@@ -2244,7 +2269,7 @@ function NJEditable(element, text, autoSuggests, suppressDropDown) {
             ////console.log('oninput event. val = ' + self.val());
             var val = self.val(),
                  matches;
-                 
+
              if(!self.isDirty) {
                  self.isDirty = true;
                  self.onDirty.forEach(function(handler) {
@@ -2269,7 +2294,7 @@ function NJEditable(element, text, autoSuggests, suppressDropDown) {
                             // Only if the hint is not was the user has typed already
                             self.suggest(self.hint);
                         } else {
-                            self.clearSuggest();                            
+                            self.clearSuggest();
                         }
                     } else { // no matches found
                         // //console.log('No matches');
@@ -2306,23 +2331,23 @@ NJEditable.prototype.simBlur = function simBlur(event) {
     var doc = this.el.ownerDocument,
         el  = event.target,
         didFindElement = false;
-    
+
     while(!didFindElement && el !== document) {
         didFindElement = (el === this.el);
         el = el.parentNode;
     }
-    
+
     if(!didFindElement) {
         //console.log('NJEditable :: Simulated blur');
-        
+
         if(this.hint) {
             this.accept();
         }
-                
+
         this.onBlur.forEach(function(handler) {
             handler.bind(this)(event);
         }.bind(this));
-        
+
         this.stopEditable();
     }
 };
@@ -2337,7 +2362,7 @@ NJEditable.prototype.onStopEdit  = [];
             //console.log('NJEditable::startEditable - Already Editable. Returning false.');
             return false;
         }
-        
+
         var self = this;
 
         this.el.contentEditable = this.isEditable = true;
@@ -2358,7 +2383,7 @@ NJEditable.prototype.onStopEdit  = [];
         this.el.ownerDocument.body.addEventListener('mousedown', this.handleMouseDown, false);
 
         if(!preventSelectAll) {
-            this.selectAll();            
+            this.selectAll();
         }
 
         ///// call onStartEdit event methods
@@ -2368,17 +2393,17 @@ NJEditable.prototype.onStopEdit  = [];
 
         return this;
     };
-  
+
     NJEditable.prototype.stopEditable = function(e) {
         var value;
         ////console.log('NJEditable::stopEditable - Removing mousedown listener to ' + this.el.nodeName);
         this.el.ownerDocument.body.removeEventListener('mousedown', this.handleMouseDown, false);
-        
+
         if(!this.isEditable) {
             //console.log('NJEditable::stopEditable - Not editable (no need to stop)');
             return false;
-        }        
-        
+        }
+
         value = this.getFirstTextNode().wholeText;
 
         this.el.contentEditable = this.isEditable = false;
@@ -2409,7 +2434,7 @@ NJEditable.prototype.onStopEdit  = [];
 
         return this;
     };
-  
+
 ///// NJEditable: val( [value] )
 ///// Get the content of the editable text (not suggestion)
 ///// or set the value by passing in string
@@ -2428,17 +2453,17 @@ NJEditable.prototype.val = function(value) {
     }
 
     //// //console.log('val() returns: ' + text);
-    return text;        
+    return text;
 
 };
 NJEditable.prototype.suggest = function(hint) {
     var self = this,
         hintDiff;
-        
+
     ///// if no hint argument passed, clear suggestions
     if(!hint) {
         this.clearSuggest();
-        return false;            
+        return false;
     }
 
     // Get difference between typed-in string, and hint
@@ -2458,9 +2483,9 @@ NJEditable.prototype.suggest = function(hint) {
             this.el.appendChild(this.suggestEl);
         }
     } else {
-        /// Remove the phantom "<BR>" element that is generated when 
+        /// Remove the phantom "<BR>" element that is generated when
         /// content editable element is empty
-        nj.children(this.el, function(item) { 
+        nj.children(this.el, function(item) {
             return item.nodeName === 'BR';
         }).forEach(function(item) {
             // //console.log('removing br');
@@ -2481,7 +2506,7 @@ NJEditable.prototype.suggestNext = function(e) {
         // //console.log('next');
         this.clearSuggest();
         this.hint = this.matches[++this.matchIndex];
-        this.suggest(this.hint);            
+        this.suggest(this.hint);
     }
 };
 NJEditable.prototype.suggestPrev = function(e) {
@@ -2506,7 +2531,7 @@ NJEditable.prototype.clearSuggest = function() {
 NJEditable.prototype.handleUp = function(e) {
     e.preventDefault();
     var word = getWordAtCaret();
-        
+
 };
 
 NJEditable.prototype.handleDown = function(e) {
@@ -2520,21 +2545,21 @@ function getWordAtCaret() {
         position     = selection.anchorOffset
         tokens       = text.split(/\s/),
         runningLength= 0, i;
-        
+
     for(i = 0; i<tokens.length; i++) {
         runningLength += tokens[i].length;
         if(runningLength > position){
             break;
         }
     }
-    
+
     //console.log('getWordAtCaret : word at caret = "' + tokens[i] +'"');
         //first        = text.substring(0,position).replace(/(\b.*)(?=$)/, '$1'),
         //second       = text.substring(position).replace(/^(.*)\b/, '$1');
-        
+
     ////console.log('getWordAtCaret : word at caret = "' + first+'|'+second +'"');
     //return first+second;
-    
+
 };
 
 NJEditable.prototype.setCursor = function(position) {
@@ -2544,10 +2569,10 @@ NJEditable.prototype.setCursor = function(position) {
     if(typeof position === 'string' && position === 'end') {
         index = this.val().length;
     }
-    
+
     sel = window.getSelection();
     sel.removeAllRanges();
-    
+
     node = this.getFirstTextNode();
     range = document.createRange();
     range.setStart(node, index);
@@ -2557,13 +2582,13 @@ NJEditable.prototype.setCursor = function(position) {
 
 NJEditable.prototype.accept = function(e, preserveCaretPosition) {
     var el = this.el;
-    
+
     if(e) {
         e.preventDefault();
     }
 
     //console.log('NJEditable::accept - Accepting hint');
-    
+
     this.elTextNode = this.getFirstTextNode();
     this.elTextNode.textContent = this.hint;
     //// empty suggest element
@@ -2603,7 +2628,7 @@ NJEditable.prototype.getFirstTextNode = function(el) {
         e.appendChild(node);
         return node;
     }
-    
+
 };
 NJEditable.prototype.backspace = function(e) {
     var sel = window.getSelection(),
@@ -2639,12 +2664,12 @@ function NJStyleSheet(cssStyleSheet, index) {
     this.isProtected = false;
     this.isCurrent = false;
     this.ruleCache = null;
-    
+
     var self = this;
-    
+
     ///// keep hidden until dirtied
     this.dirtyMarker.appendChild(nj.textNode('*'));
-    
+
     //// add toggleEl disabling fuctionality
     this.toggleEl.addEventListener('click', function(e) {
         var action     = 'Disable',
@@ -2655,7 +2680,7 @@ function NJStyleSheet(cssStyleSheet, index) {
             action     = 'Enable';
             undoAction = 'Disable';
         }
-        
+
         toggleCommand = Object.create(Object.prototype, {
             description: { value: action+" Stylesheet" },
             execute: {
@@ -2670,14 +2695,14 @@ function NJStyleSheet(cssStyleSheet, index) {
                 }
             }
         });
-        
+
         toggleCommand.execute();
         NJevent("sendToUndo", toggleCommand);
-        
+
     }, false);
-    
+
     var countStr;
-    
+
     ///// Determine stylesheet name to use in list
     if (this.sheet.href) {
         this.name = nj.getFileNameFromPath(this.sheet.href);
@@ -2687,52 +2712,52 @@ function NJStyleSheet(cssStyleSheet, index) {
         this.name += countStr;
         this.id  = this.name;
     }
-    
+
     this.inputLabel.appendChild(nj.textNode('Media:'));
-    
+
     if(cssStyleSheet.media.length) {
         this.mediaInput.value = nj.toArray(cssStyleSheet.media).reduce(function(prevVal, val) {
             return prevVal + ', ' + val;
         });
         this.mediaInput.title = this.mediaInput.value;
     }
-    
+
     ///// Set up media attribute switcher
     this.mediaInput.addEventListener('change', function(e) {
         var mediaListObj  = self.sheet.media,
             userMediaList = this.value.split(/\s*[,]\s*/),
             el = this;
         //console.log('onchange event');
-        
+
         this.title = this.value;
-        
+
         el.style.webkitTransition = '';
         this.style.backgroundColor = '#A0A0A0';
-        
+
         setTimeout(function() {
             el.style.webkitTransition = 'background-color .12s ease-in';
             el.style.backgroundColor = '#474747';
         }, 10);
-        
+
         this.addEventListener('webkitTransitionEnd', function njGlow(e) {
             e.stopPropagation();
             this.style.backgroundColor = '';
             this.removeEventListener('webkitTransitionEnd', njGlow, false);
         }, false);
-            
+
         //// clear media list
         nj.toArray(mediaListObj).forEach(function(medium) {
             this.deleteMedium(medium);
         }, mediaListObj);
-        
+
         //// add the user's media
         userMediaList.forEach(function(medium) {
             this.appendMedium(medium);
         }, mediaListObj);
-        
+
         //console.log(mediaListObj);
     }, false);
-    
+
     // rec = {
     //         deleteSheet : function() {},
     //         reAddSheet  : function() {}
@@ -2761,7 +2786,7 @@ function NJStyleSheet(cssStyleSheet, index) {
             }
         }
     });
-    
+
     ///// Add Delete functionality
     this.deleteEl.addEventListener('click', function(e) {
         //console.log('click delete');
@@ -2769,7 +2794,7 @@ function NJStyleSheet(cssStyleSheet, index) {
         NJevent("sendToUndo", deleteCommand);
         //self.remove();
     }, false);
-    
+
     ///// Attach NJSTylesheet object to host stylesheet object
     this.sheet.njStyleSheet = this;
 }
@@ -2788,36 +2813,36 @@ NJStyleSheet.prototype.appendCachedRules = function() {
 
 NJStyleSheet.prototype.render = function(cont) {
     var h, intervalId;
-    
+
     this.container = cont;
     ///// Attach NJStyleSheet object to the list item for later access
     cont.njStyleSheet = this;
-    
+
     this.el.appendChild(this.toggleEl);
     this.el.appendChild(this.dirtyMarker);
-        
+
     nj.empty(this.sheetNameEl);
     this.sheetNameEl.appendChild(nj.textNode(this.name));
     this.sheetNameEl.title = this.name;
-        
+
     this.el.appendChild(this.sheetNameEl);
     this.el.appendChild(this.deleteEl);
     this.el.appendChild(this.mediaInput);
     this.el.appendChild(this.inputLabel);
-    
+
     if(this.isProtected) {
         this.el.classList.add('nj-css-protected-sheet');
     }
-    
+
     this.el.classList.add('nj-get-height');
-    
+
     cont.appendChild(this.el);
-    
+
     h = nj.height(this.el);
-    
+
     this.el.classList.add('nj-pre-slide');
     this.el.classList.remove('nj-get-height');
-    
+
     this.el.addEventListener('webkitTransitionEnd', function njSlide(e) {
         e.stopPropagation();
         clearInterval(intervalId)
@@ -2827,7 +2852,7 @@ NJStyleSheet.prototype.render = function(cont) {
     //this.el.style.height = '0px';
     //this.el.style.overflow = 'hidden';
     this.el.style.height = h;
-    
+
     intervalId = setInterval(function() {
         CSSPanel.scrollTo('bottom', this.container.parentNode);
     }.bind(this), 5);
@@ -2845,7 +2870,7 @@ NJStyleSheet.prototype.dirty = function() {
 };
 NJStyleSheet.prototype.unDirty = function() {
     this.isDirty = false;
-    this.dirtyMarker.classList.remove('nj-css-dirty');    
+    this.dirtyMarker.classList.remove('nj-css-dirty');
 };
 
 NJStyleSheet.prototype.disable = function() {
@@ -2874,13 +2899,13 @@ NJStyleSheet.prototype.remove = function() {
     if(!this.isProtected) {
         var njRules = [];
         //console.log('Removing stylesheet');
-        
+
         ///// Remove event listeners
         this.sheetNameEl.onclick = null;
         this.deleteEl.onclick = null;
         this.toggleEl.onclick = null;
         this.mediaInput.onchange = null;
-        
+
         ///// Remove all njRules from Rule List
         njRules = nj.toArray(this.sheet.rules).forEach(function(rule) {
             if(rule.njcssrule) {

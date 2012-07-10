@@ -1,7 +1,32 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
 var Montage = require("montage/core/core").Montage,
@@ -15,7 +40,7 @@ var Montage = require("montage/core/core").Montage,
 exports.NJUtils = Montage.create(Component, {
 
     /* =============== DOM Access ================ */
-    
+
     ///// Quick "getElementById"
     $ : {
         value: function(id, doc) {
@@ -23,7 +48,7 @@ exports.NJUtils = Montage.create(Component, {
             return doc.getElementById(id);
         }
     },
-    
+
     ///// Quick "getElementsByClassName" which also returns as an Array
     ///// Can return as NodeList by passing true as second argument
     $$ : {
@@ -33,7 +58,7 @@ exports.NJUtils = Montage.create(Component, {
             return (asNodeList) ? list : this.toArray(list);
         }
     },
-    
+
     ///// Get child nodes of element
     ///// Omit filter to only return element nodes
     ///// Pass in filter function to minimize collection, or
@@ -41,14 +66,14 @@ exports.NJUtils = Montage.create(Component, {
     children : {
         value : function(el, filter) {
             var f = filter || function(item) {
-        		return item.nodeType === 1;
-        	};
-        	return this.toArray(el.childNodes).filter(f);
+                return item.nodeType === 1;
+            };
+            return this.toArray(el.childNodes).filter(f);
         }
     },
-    
+
      /* ============= DOM Manipulation ============= */
-    
+
     ///// Creates and returns text node from string
     textNode : {
         value: function(text) {
@@ -71,7 +96,7 @@ exports.NJUtils = Montage.create(Component, {
             return el;
         }
     },
-    
+
     decor: {
         value: function(el, attr) {
             if (typeof attr === 'object') {
@@ -159,56 +184,56 @@ exports.NJUtils = Montage.create(Component, {
             return node;
         }
     },
-    
+
     queryParentSelector : {
-    	value: function(el, strSelector) {
-			// queryParentSelector:
-			// Given a DOM element el (required), walk up the DOM tree
-			// and find the first parent that matches selector strSelector (required).
-			// Returns: The element that matches, or false if there is no match
-			// or if insufficient parameters are supplied.
-			
-			if ((typeof(el) === "undefined") || (typeof(strSelector) === "undefined")) {
-				// Parameters are required, m'kay?
-				return false;
-			} else if ((typeof(el) !== "object") || (typeof(strSelector) !== "string" )) {
-				// You also have to use the right parameters.
-				return false;
-			}
-			
-			// First, get an empty clone of the parent.
-			var myParent = el.parentNode;
-			var clone = myParent.cloneNode(false);
-			if (clone === null) {
-				return false;
-			}
-			
-			// If we're at the top of the DOM, our clone will be an htmlDocument.
-			// htmlDocument has no tagName.
-			if (typeof(clone.tagName) !== "undefined") {
-				// create a bogus div to use as a base for querySelector
-				var temp = document.createElement("div");
-				
-				// Append the clone to the bogus div
-				temp.appendChild(clone);
-				
-				// Now we can use querySelector!  Sweet.
-				var selectorTest = temp.querySelector(strSelector);
-				
-				// What has querySelector returned?
-				if (selectorTest === null) {
-					// No match, so recurse.
-					return this.queryParentSelector(myParent, strSelector);
-				} else {
-					// Match! Return the element.
-					return myParent;
-				}
-			} else {
-				// We're at the top of the DOM so we're done.
-				return false;
-			}
-		}
-    	
+        value: function(el, strSelector) {
+            // queryParentSelector:
+            // Given a DOM element el (required), walk up the DOM tree
+            // and find the first parent that matches selector strSelector (required).
+            // Returns: The element that matches, or false if there is no match
+            // or if insufficient parameters are supplied.
+
+            if ((typeof(el) === "undefined") || (typeof(strSelector) === "undefined")) {
+                // Parameters are required, m'kay?
+                return false;
+            } else if ((typeof(el) !== "object") || (typeof(strSelector) !== "string" )) {
+                // You also have to use the right parameters.
+                return false;
+            }
+
+            // First, get an empty clone of the parent.
+            var myParent = el.parentNode;
+            var clone = myParent.cloneNode(false);
+            if (clone === null) {
+                return false;
+            }
+
+            // If we're at the top of the DOM, our clone will be an htmlDocument.
+            // htmlDocument has no tagName.
+            if (typeof(clone.tagName) !== "undefined") {
+                // create a bogus div to use as a base for querySelector
+                var temp = document.createElement("div");
+
+                // Append the clone to the bogus div
+                temp.appendChild(clone);
+
+                // Now we can use querySelector!  Sweet.
+                var selectorTest = temp.querySelector(strSelector);
+
+                // What has querySelector returned?
+                if (selectorTest === null) {
+                    // No match, so recurse.
+                    return this.queryParentSelector(myParent, strSelector);
+                } else {
+                    // Match! Return the element.
+                    return myParent;
+                }
+            } else {
+                // We're at the top of the DOM so we're done.
+                return false;
+            }
+        }
+
     },
 
     // Returns the numerical value and unit string from a string.
@@ -233,14 +258,14 @@ exports.NJUtils = Montage.create(Component, {
     },
 
     /* ================= Style methods ================= */
-    
+
     ///// Get computed height of element
     height : {
         value: function(node, pseudo) {
             return node.ownerDocument.defaultView.getComputedStyle(node, pseudo).getPropertyValue('height');
         }
     },
-    
+
     /* ================= Array methods ================= */
 
     ///// Return an array from an array-like object
@@ -249,9 +274,9 @@ exports.NJUtils = Montage.create(Component, {
             return Array.prototype.slice.call(arrayLikeObj);
         }
     },
-    
+
     /* ================= String methods ================= */
-    
+
     ///// Return the last part of a path (e.g. filename)
     getFileNameFromPath : {
         value: function(path) {
@@ -286,9 +311,9 @@ exports.NJUtils = Montage.create(Component, {
         value: function(len) {
             var length;
             len ? length = len : length = 8;
-            
+
             return Uuid.generate().substring(0,length);
         }
     }
-    
+
 });

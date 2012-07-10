@@ -1,7 +1,32 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
 var Montage = require("montage/core/core").Montage;
@@ -47,7 +72,7 @@ exports.Resizer = Montage.create(Component, {
     _isInversed: {
         value: false
     },
- 
+
     isInversed: {
         get: function() {
             return this._isInversed;
@@ -57,11 +82,11 @@ exports.Resizer = Montage.create(Component, {
         },
         serializable: true
     },
- 
+
     _isVertical: {
         value: null
     },
- 
+
     isVertical: {
         get: function() {
             return this._isVertical;
@@ -73,22 +98,22 @@ exports.Resizer = Montage.create(Component, {
     },
 
     _isPanel: {
-    	value: true
+        value: true
     },
     isPanel: {
-    	get: function() {
-    		return this._isPanel;
-    	},
-    	set: function(value) {
-    		this._isPanel = value;
-    	},
+        get: function() {
+            return this._isPanel;
+        },
+        set: function(value) {
+            this._isPanel = value;
+        },
         serializable: true
     },
 
     _panel : {
         value: null
     },
- 
+
     panel : {
         get: function() {
             return this._panel;
@@ -103,10 +128,10 @@ exports.Resizer = Montage.create(Component, {
     height: {
         value: null
     },
- 
+
     handleClick: {
         value: function() {
- 
+
         }
     },
 
@@ -123,14 +148,14 @@ exports.Resizer = Montage.create(Component, {
                 this._startPosition = e.x;
                 this._initDimension = this.panel.offsetWidth;
             }
- 
+
             this.panel.classList.add("disableTransition");
             window.addEventListener("mousemove", this, false);
             window.addEventListener("mouseup", this, false);
             NJevent("panelResizedStart", this)
         }
     },
- 
+
     handleDblclick: {
         value : function() {
             this.panel.addEventListener("webkitTransitionEnd", this, false);
@@ -155,7 +180,7 @@ exports.Resizer = Montage.create(Component, {
 
         }
     },
- 
+
     prepareForDraw: {
         value: function() {
             if(this.willSave) {
@@ -178,13 +203,13 @@ exports.Resizer = Montage.create(Component, {
             this.element.addEventListener("dblclick", this, false);
         }
     },
- 
+
     draw: {
         value: function() {
- 
+
         }
     },
- 
+
     handleMouseup: {
         value:  function(e) {
             e.preventDefault();
@@ -207,7 +232,7 @@ exports.Resizer = Montage.create(Component, {
             NJevent("panelResizedEnd", this)
         }
     },
- 
+
     handleMousemove: {
         value: function(e) {
             if(this.isVertical) {
@@ -215,18 +240,18 @@ exports.Resizer = Montage.create(Component, {
                 this.panel.style.height = this.value + "px";
             }
             else {
-            	if (this.isPanel) {
-                	this.value = this._initDimension + (this._startPosition - e.x);
-            	} else {
-            		this.value = this._isInversed ? this._initDimension + (this._startPosition - e.x) : this._initDimension + (e.x - this._startPosition);
-            	}
+                if (this.isPanel) {
+                    this.value = this._initDimension + (this._startPosition - e.x);
+                } else {
+                    this.value = this._isInversed ? this._initDimension + (this._startPosition - e.x) : this._initDimension + (e.x - this._startPosition);
+                }
                 this.panel.style.width = this.value + "px";
             }
- 
+
             if(this.redrawStage) {
                 this.application.ninja.stage.resizeCanvases = true;
             }
- 
+
             NJevent("panelResizing", this);
         }
     }

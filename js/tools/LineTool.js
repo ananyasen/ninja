@@ -1,26 +1,51 @@
 /* <copyright>
-This file contains proprietary software owned by Motorola Mobility, Inc.<br/>
-No rights, expressed or implied, whatsoever to this software are provided by Motorola Mobility, Inc. hereunder.<br/>
-(c) Copyright 2011 Motorola Mobility, Inc.  All Rights Reserved.
+Copyright (c) 2012, Motorola Mobility LLC.
+All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Motorola Mobility LLC nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 </copyright> */
 
-var Montage = 	require("montage/core/core").Montage,
+var Montage =   require("montage/core/core").Montage,
     ShapeTool = require("js/tools/ShapeTool").ShapeTool,
     DrawingToolBase = require("js/tools/drawing-tool-base").DrawingToolBase,
     NJUtils = require("js/lib/NJUtils").NJUtils,
     TagTool = require("js/tools/TagTool").TagTool,
-    ShapesController = 	require("js/controllers/elements/shapes-controller").ShapesController,
+    ShapesController =  require("js/controllers/elements/shapes-controller").ShapesController,
     ShapeModel = require("js/models/shape-model").ShapeModel;
 
 var Line = require("js/lib/geom/line").Line;
 var MaterialsModel = require("js/models/materials-model").MaterialsModel;
 
 exports.LineTool = Montage.create(ShapeTool, {
-	_toolID: { value: "lineTool" },
-	_imageID: { value: "lineToolImg" },
-	_toolImageClass: { value: "lineToolUp" },
-	_selectedToolImageClass: { value: "lineToolDown" },
-	_toolTipText: { value: "Line Tool (L)" },
+    _toolID: { value: "lineTool" },
+    _imageID: { value: "lineToolImg" },
+    _toolImageClass: { value: "lineToolUp" },
+    _selectedToolImageClass: { value: "lineToolDown" },
+    _toolTipText: { value: "Line Tool (L)" },
 
     _tmpDrawIndex : { value : 1, writable:true},
 
@@ -149,10 +174,10 @@ exports.LineTool = Montage.create(ShapeTool, {
                 slope,
                 dx,
                 dy;
-            
-			if (hitRec0 && hitRec1) {
-				var p0 = hitRec0.getLocalPoint(),
-					p1 = hitRec1.getLocalPoint();
+
+            if (hitRec0 && hitRec1) {
+                var p0 = hitRec0.getLocalPoint(),
+                    p1 = hitRec1.getLocalPoint();
 
                 dx = Math.floor(p0[0] - p1[0]);
                 dy = Math.floor(p0[1] - p1[1]);
@@ -222,7 +247,7 @@ exports.LineTool = Montage.create(ShapeTool, {
     },
 
     RenderShape: {
-		value: function (w, h, planeMat, midPt, canvas, slope, xAdj, yAdj)
+        value: function (w, h, planeMat, midPt, canvas, slope, xAdj, yAdj)
         {
 
             var strokeStyleIndex = this.options.strokeStyleIndex;
@@ -244,7 +269,11 @@ exports.LineTool = Montage.create(ShapeTool, {
                 {
                     strokeMaterial = Object.create(MaterialsModel.getMaterial(strokeM));
                 }
-				strokeColor = ShapesController.getMaterialColor(strokeM) || strokeColor;
+                if (strokeMaterial && this.options.stroke.color && (strokeMaterial.gradientType === this.options.stroke.color.gradientMode)) {
+                    strokeColor = {gradientMode:strokeMaterial.gradientType, color:this.options.stroke.color.stops};
+                } else {
+                strokeColor = ShapesController.getMaterialColor(strokeM) || strokeColor;
+            }
             }
 
             var world = this.getGLWorld(canvas, this.options.use3D);
