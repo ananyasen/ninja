@@ -13,12 +13,19 @@ var Montage = 		        require("montage/core/core").Montage,
 
 var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.create(Component, {
 
+    //count how many times pasted
+    //used to move multiple pastes of same copy
+    pasteCounter:{
+        value: 0
+    },
+
     paste:{
         value: function(clipboardEvent){
             var clipboardData = clipboardEvent.clipboardData,
             htmlData = clipboardData.getData("text/html"),
             textData = clipboardData.getData("text/plain"),
             i=0,
+            pastedElements = [],//array of te pastes clones - for selection
             imageMime, imageData, imageElement;
 
             //handle image blobs
@@ -32,10 +39,13 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                         }catch(e){
                             console.log(""+e.stack);
                         }
-                        this.application.ninja.selectionController.selectElements(imageElement);
                         this.application.ninja.currentDocument.model.needsSave = true;
 
+                        pastedElements.push(imageElement);
                     }
+                }
+                if(pastedElements.length > 0){
+                    NJevent("elementAdded", pastedElements);
                 }
             }
 
@@ -83,13 +93,13 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                 //Adding element once it is loaded
                 element.onload = function () {
                     element.onload = null;
-                    self.application.ninja.elementMediator.addElements(element, rules, true/*notify*/, false /*callAddDelegate*/);
+                    self.application.ninja.elementMediator.addElements(element, rules, false/*notify*/, false /*callAddDelegate*/);
                 };
                 //Setting rules of element
                 rules = {
                     'position': 'absolute',
-                    'top' : '100px',
-                    'left' : '100px'
+                    'top' : '0px',
+                    'left' : '0px'
                 };
                 //
                 self.application.ninja.elementMediator.addElements(element, rules, false/*notify*/, false /*callAddDelegate*/);
@@ -130,7 +140,7 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                     console.log(""+e.stack);
                 }
 
-                for(i=0; i < nodeList.length; i++){
+                for(i=(nodeList.length -1); i > -1; i--){
                     if(nodeList[i].tagName === "META") {
                         nodeList[i] = null;
                     }
@@ -138,22 +148,18 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                         //can't paste external canvas for lack of all metadata
                         nodeList[i] = null;
                     }
-                    else if((nodeList[i].nodeType === 3) || (nodeList[i].tagName === "A")){
+                    else if(nodeList[i].nodeType === 3){
                         node = nodeList[i].cloneNode(true);
-
-                        divWrapper = document.application.njUtils.make("div", null, this.application.ninja.currentDocument);
-                        spanWrapper = document.application.njUtils.make("span", null, this.application.ninja.currentDocument);
-                        spanWrapper.appendChild(node);
-                        divWrapper.appendChild(spanWrapper);
-                        styles = {"position":"absolute", "top":"100px", "left":"100px"};
-
-                        this.pastePositioned(divWrapper, styles);
+                        this.pasteText(node);
 
                         nodeList[i] = null;
                         pastedElements.push(divWrapper);
 
-                    }else if(nodeList[i].tagName === "SPAN"){
+                    }else if((nodeList[i].tagName === "SPAN") || (nodeList[i].tagName === "A")){
                         node = nodeList[i].cloneNode(true);
+
+                        //remove class since we don't have the external stylesheet
+                        if(node.hasAttribute("class")){node.removeAttribute("class");}
 
                         divWrapper = document.application.njUtils.make("div", null, this.application.ninja.currentDocument);
                         divWrapper.appendChild(node);
@@ -167,7 +173,10 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                     else {
                         node = nodeList[i].cloneNode(true);
 
-                        //get class string while copying .... generate styles from class
+                        //remove class since we don't have the external stylesheet
+                        if(node.hasAttribute("class")){node.removeAttribute("class");}
+
+
                         styles = {"position":"absolute", "top":"100px", "left":"100px"};
 
                         this.pastePositioned(node, styles);
@@ -182,14 +191,31 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
 
 
             }else if(textData){
-                node = ClipboardUtil.deserializeHtmlString("<div><span>"+ textData +"</span></div>")[0];
-                styles = {"position":"absolute", "top":"100px", "left":"100px"};
-                this.pastePositioned(node, styles);
+                node = ClipboardUtil.deserializeHtmlString(textData)[0];
+                this.pasteText(node);
+
+                pastedElements.push(node);
             }
 
             NJevent("elementAdded", pastedElements);
             this.application.ninja.currentDocument.model.needsSave = true;
 
+        }
+    },
+
+    pasteText:{
+        value: function(textNode){
+            var styles = null,
+                divWrapper = null,
+                spanWrapper = null;
+
+            divWrapper = document.application.njUtils.make("div", null, this.application.ninja.currentDocument);
+            spanWrapper = document.application.njUtils.make("span", null, this.application.ninja.currentDocument);
+            spanWrapper.appendChild(textNode);
+            divWrapper.appendChild(spanWrapper);
+            styles = {"position":"absolute", "top":"100px", "left":"100px"};
+
+            this.pastePositioned(divWrapper, styles);
         }
     },
 
@@ -208,11 +234,15 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
             newX = styles ? ("" + (styles.left + (25 * counter)) + "px") : "100px";
             newY = styles ? ("" + (styles.top + (25 * counter)) + "px") : "100px";
 
-            if(!styles || (styles && !styles.position)){
-                this.application.ninja.elementMediator.addElements(element, null, false/*notify*/, false /*callAddDelegate*/);
-            }else if(styles && (styles.position === "absolute")){
-                this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX}, false/*notify*/, false /*callAddDelegate*/);//displace
+            if((element.tagName === "IMG") || (element.getAttribute("type") === "image/svg+xml")){
+                element.onload = function(){
+                    element.onload = null;
+                    //refresh selection
+                    self.application.ninja.stage.needsDraw = true;
+                }
             }
+
+            this.application.ninja.elementMediator.addElements(element, {"top" : newY, "left" : newX, "position":"absolute"}, false/*notify*/, false /*callAddDelegate*/);//displace
         }
     }
 
