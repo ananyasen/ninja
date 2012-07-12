@@ -152,8 +152,6 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
 
             this.pasteCounter++;
 
-            //cleanse HTML
-
             for(j=0; j< this.copiedObjects.copy.length; j++){
                 copiedElement = this.copiedObjects.copy[j];
                 styles = null;
@@ -259,8 +257,8 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
 
             if(sourceCanvas.ownerDocument.defaultView.getComputedStyle(sourceCanvas).getPropertyValue("position") === "absolute"){
                 styles = canvas.elementModel.data || {};
-                styles.top = "" + (this.application.ninja.elementMediator.getProperty(sourceCanvas, "top", parseInt) + (25 * this.pasteCounter))+"px";
-                styles.left = "" + (this.application.ninja.elementMediator.getProperty(sourceCanvas, "left", parseInt) + (25 * this.pasteCounter)) + "px";
+                styles.top = "" + (this.application.ninja.elementMediator.getProperty(sourceCanvas, "top", parseInt) + (10 * this.pasteCounter))+"px";
+                styles.left = "" + (this.application.ninja.elementMediator.getProperty(sourceCanvas, "left", parseInt) + (10 * this.pasteCounter)) + "px";
             }else{
                 styles = null;
             }
@@ -357,8 +355,8 @@ var ElementsClipboardAgent = exports.ElementsClipboardAgent = Montage.create(Com
 
             x = styles ? ("" + styles.left + "px") : "100px";
             y = styles ? ("" + styles.top + "px") : "100px";
-            newX = styles ? ("" + (styles.left + (25 * counter)) + "px") : "100px";
-            newY = styles ? ("" + (styles.top + (25 * counter)) + "px") : "100px";
+            newX = styles ? ("" + (styles.left + (10 * counter)) + "px") : "100px";
+            newY = styles ? ("" + (styles.top + (10 * counter)) + "px") : "100px";
             
             if(!styles || (styles && !styles.position)){
                 this.application.ninja.elementMediator.addElements(element, null, false /*notify*/, false /*callAddDelegate*/);
