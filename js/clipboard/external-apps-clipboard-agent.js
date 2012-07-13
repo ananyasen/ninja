@@ -146,6 +146,9 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                 htmlData = htmlData.replace(/\<script [^>]+>/g," "); // Remove the script tag.
             }
 
+            textData = textData.replace(/\<script [^>]+>/g," "); // Remove any script tag.
+
+
             data = htmlData ? htmlData : textData;
 
             if (data && data.length) {
