@@ -192,7 +192,9 @@ exports.Properties = Montage.create(Component, {
 
                 // TODO - This should only update the properties that were changed.
                 l = ElementsMediator.getProperty(el, "left");
+                l = l ? l : ("" + el.offsetLeft + "px");
                 t = ElementsMediator.getProperty(el, "top");
+                t = t ? t : ("" + el.offsetTop + "px");
                 lvu = document.application.njUtils.getValueAndUnits(l);
                 tvu = document.application.njUtils.getValueAndUnits(t);
                 this.positionSize.leftUnits = lvu[1];
@@ -201,7 +203,9 @@ exports.Properties = Montage.create(Component, {
                 this.positionSize.topPosition = tvu[0];
 
                 h = ElementsMediator.getProperty(el, "height");
+                h = h ? h : ("" + el.offsetHeight + "px");
                 w = ElementsMediator.getProperty(el, "width");
+                w = w ? w : ("" + el.offsetWidth + "px");
                 hvu = document.application.njUtils.getValueAndUnits(h);
                 wvu = document.application.njUtils.getValueAndUnits(w);
 
@@ -275,7 +279,9 @@ exports.Properties = Montage.create(Component, {
             this.threeD.flatten = ElementsMediator.getProperty(el, "-webkit-transform-style") !== "preserve-3d";
 
             l = ElementsMediator.getProperty(el, "left");
+            l = l ? l : ("" + el.offsetLeft + "px");
             t = ElementsMediator.getProperty(el, "top");
+            t = t ? t : ("" + el.offsetTop + "px");
             lvu = document.application.njUtils.getValueAndUnits(l);
             tvu = document.application.njUtils.getValueAndUnits(t);
             this.positionSize.leftUnits = lvu[1];
@@ -284,7 +290,9 @@ exports.Properties = Montage.create(Component, {
             this.positionSize.topPosition = tvu[0];
 
             h = ElementsMediator.getProperty(el, "height");
+            h = h ? h : ("" + el.offsetHeight + "px");
             w = ElementsMediator.getProperty(el, "width");
+            w = w ? w : ("" + el.offsetWidth + "px");
             hvu = document.application.njUtils.getValueAndUnits(h);
             wvu = document.application.njUtils.getValueAndUnits(w);
 

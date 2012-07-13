@@ -155,9 +155,9 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
 
                 divWrapper = document.application.njUtils.make("div", null, this.application.ninja.currentDocument);
                 this.application.ninja.elementMediator.addElements(divWrapper, {"height": "68px",
-                                                                                "left": "178px",
+                                                                                "left": "0px",
                                                                                 "position": "absolute",
-                                                                                "top": "88px",
+                                                                                "top": "0px",
                                                                                 "width": "161px"});
 
                 divWrapper.innerHTML = data;
