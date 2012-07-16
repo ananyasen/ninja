@@ -50,7 +50,6 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
             htmlData = clipboardData.getData("text/html"),
             textData = clipboardData.getData("text/plain"),
             i=0,
-            pastedElements = [],//array of te pastes clones - for selection
             imageMime, imageData, imageElement;
 
             //handle image blobs
@@ -65,12 +64,7 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                             console.log(""+e.stack);
                         }
                         this.application.ninja.currentDocument.model.needsSave = true;
-
-                        pastedElements.push(imageElement);
                     }
-                }
-                if(pastedElements.length > 0){
-                    NJevent("elementAdded", pastedElements);
                 }
             }
 
@@ -118,7 +112,7 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
                 //Adding element once it is loaded
                 element.onload = function () {
                     element.onload = null;
-                    self.application.ninja.elementMediator.addElements(element, rules, false/*notify*/, false /*callAddDelegate*/);
+                    self.application.ninja.elementMediator.addElements(element, rules, true/*notify*/, false /*callAddDelegate*/);
                 };
                 //Setting rules of element
                 rules = {
