@@ -67,7 +67,7 @@ exports.TextDocument = Montage.create(Component, {
             if (view === 'code') {
                 //TODO: Remove reference and use as part of model
                 this.currentView = 'code';
-                //Setting current view object to design
+                //Setting current view object to code
                 this.model.currentView = this.model.views.code;
                 //Rendering view
                 codeDocumentView.textArea.value = file.content;
