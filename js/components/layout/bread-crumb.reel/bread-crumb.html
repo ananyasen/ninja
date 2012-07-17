@@ -40,22 +40,15 @@ POSSIBILITY OF SUCH DAMAGE.
                 "owner": {
                     "prototype": "js/components/layout/bread-crumb.reel[Breadcrumb]",
                     "properties": {
-                        "element": {"#": "breadcrumbTrail"},
-                        "breadcrumbBt": {"@": "breadCrumbButton"}
+                        "element": {"#": "breadcrumbTrail"}
                     }
                 },
 
-                "breadCrumbButton": {
-                    "prototype": "montage/ui/native/button.reel",
+                "breadcrumbButton": {
+                    "prototype": "js/components/layout/bread-crumb-button.reel",
                     "properties": {
-                        "element": {"#": "breadcrumb_button"}
+                        "element": {"#": "breadcrumbButton"}
                     },
-                    "listeners": [
-                        {
-                            "type": "action",
-                            "listener": {"@": "owner"}
-                        }
-                    ],
                     "bindings": {
                         "label": {"<-": "@buttonsList.objectAtCurrentIteration.label"},
                         "value": {"<-": "@buttonsList.objectAtCurrentIteration.nodeUuid"}
@@ -94,7 +87,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
         <section data-montage-id="breadcrumbTrail" class="breadcrumbTrail">
             <div data-montage-id="breadcrumb_container">
-                <button data-montage-id="breadcrumb_button" class="nj-skinned"></button>
+                <div data-montage-id="breadcrumbButton"></div>
             </div>
             <div data-montage-id="disabledCondition" class="panelDisabled"></div>
         </section>
