@@ -189,7 +189,7 @@ var ExternalAppsClipboardAgent = exports.ExternalAppsClipboardAgent = Montage.cr
             data = data.replace(/\<script [^>]+>/g," "); // Remove script tags to prevenet script injection attack
             data = data.replace(/\<link [^>]+>/g," "); // Remove link tags to prevent unwanted css files that may corrupt the stage
             data = data.replace(/\<xml [^>]+>/g," "); // Remove xml tags since it works only for IE browsers
-            data = data.replace(/\<iframe [^>]+>/g," "); // Remove iframe tags to prevenet iframe injection attack
+            data = data.replace(/\<iframe [^>]+>/g," "); // Remove iframe tags to prevent iframe injection attack
 
             return data;
         }
