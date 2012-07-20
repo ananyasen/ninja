@@ -87,16 +87,6 @@ var ClipboardController = exports.ClipboardController = Montage.create(Component
                 }
             }
 
-            //perform clipboard operations only if selection tool is selected
-            if(this.application.ninja.toolsData.defaultToolsData[this.application.ninja.toolsData.selectionToolIndex].selected === false){
-                return;
-            }
-
-            //perform clipboard operations only if selection tool is selected
-            if(this.application.ninja.toolsData.defaultToolsData[this.application.ninja.toolsData.selectionToolIndex].selected === false){
-                return;
-            }
-
             if(this.clipboardContext === "stage"){
                 ElementsClipboardAgent.copy(clipboardEvent);
             }
@@ -114,16 +104,6 @@ var ClipboardController = exports.ClipboardController = Montage.create(Component
                 if(!document.activeElement.getAttribute("data-montage-id") === "menuItemButton") {
                     return;
                 }
-            }
-
-            //perform clipboard operations only if selection tool is selected
-            if(this.application.ninja.toolsData.defaultToolsData[this.application.ninja.toolsData.selectionToolIndex].selected === false){
-                return;
-            }
-
-            //perform clipboard operations only if selection tool is selected
-            if(this.application.ninja.toolsData.defaultToolsData[this.application.ninja.toolsData.selectionToolIndex].selected === false){
-                return;
             }
 
             if(this.clipboardContext === "stage"){
@@ -150,16 +130,6 @@ var ClipboardController = exports.ClipboardController = Montage.create(Component
                 if(!document.activeElement.getAttribute("data-montage-id") === "menuItemButton") {
                     return;
                 }
-            }
-
-            //perform clipboard operations only if selection tool is selected
-            if(this.application.ninja.toolsData.defaultToolsData[this.application.ninja.toolsData.selectionToolIndex].selected === false){
-                return;
-            }
-
-            //perform clipboard operations only if selection tool is selected
-            if(this.application.ninja.toolsData.defaultToolsData[this.application.ninja.toolsData.selectionToolIndex].selected === false){
-                return;
             }
 
             //TODO: return if stage is not focussed
