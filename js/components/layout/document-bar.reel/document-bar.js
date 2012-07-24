@@ -73,12 +73,12 @@ exports.DocumentBar = Montage.create(Component, {
     _codeEditorWrapper:{
         value: null
     },
-
+    ////////////////////////////////////////////////////////////////////
+    //
     codeEditorWrapper:{
-        get : function() {
-            return this._codeEditorWrapper;
-        },
-        set : function(value) {
+        get: function() {return this._codeEditorWrapper;},
+        set: function(value) {
+        	//
             if(this._codeEditorWrapper !== value){
                 this._codeEditorWrapper = value;
             }
@@ -89,9 +89,13 @@ exports.DocumentBar = Montage.create(Component, {
     btnCode: {
         value: null
     },
+    ////////////////////////////////////////////////////////////////////
+    //
     btnDesign: {
         value: null
     },
+    ////////////////////////////////////////////////////////////////////
+    //
     btnPreview: {
         value: null
     },
@@ -209,52 +213,55 @@ exports.DocumentBar = Montage.create(Component, {
     },
     ////////////////////////////////////////////////////////////////////
     //
-    renderDesignView: {
-        value: function () {
-            //Reloading in design view (with updates from other view)
-            this.reloadView('design', this.fileTemplate);
-        }
-    },
-    ////////////////////////////////////////////////////////////////////
-    //
-    renderCodeView: {
-        value: function () {
-            //Reloading in code view (with updates from other view)
-            this.reloadView('code', this.fileTemplate);
-        }
-    },
-    ////////////////////////////////////////////////////////////////////
-    //
     showViewDesign: {
         value: function () {
             //
-            if (this._currentDocument.model.currentView !== 'design') {
-                //
-                this._currentDocument.model.switchViewTo('design');
-                this.btnCode.setAttribute('class', 'inactive');
-                this.btnDesign.removeAttribute('class');
-                //this._currentDocument.model.file.content.body = '<div class="test">hello</div><div class="test">hello</div>';
-                var render = this.renderDesignView.bind(this._currentDocument);
-                render();
-            }
+            this.showView('design', this.renderDesignView, this.btnDesign, this.btnCode);
         }
     },
     ////////////////////////////////////////////////////////////////////
-    //TODO: Implement code with that updates the file template through the ninja document parser
+    //
     showViewCode: {
         value: function () {
             //
-            if (this._currentDocument.model.currentView !== 'code') {
-                //
-                this._currentDocument.model.switchViewTo('code');
-                this.btnDesign.setAttribute('class', 'inactive');
-                this.btnCode.removeAttribute('class');
-                var render = this.renderCodeView.bind(this._currentDocument);
-                render();
-            }
+            this.showView('code', this.renderCodeView, this.btnCode, this.btnDesign);
         }
     },
-
+    ////////////////////////////////////////////////////////////////////
+    //
+    showView: {
+	    value: function (view, render, aBtn, iBtn) {
+	    	//TODO: Remove reference to string view
+		    if (this._currentDocument.model.currentView !== view) {
+    		    var doc;
+                //Switching view and changing button modes
+                this._currentDocument.model.switchViewTo(view);
+                iBtn.setAttribute('class', 'inactive');
+                aBtn.removeAttribute('class');
+                //Checking for view to get other view document (object to code and string to design)
+                if (view === 'code') {
+                    doc = {
+                        mode: 'html',
+                        libs: this._currentDocument.model.libs,
+                        file: this._currentDocument.model.file,
+                        webgl: this._currentDocument.model.webGlHelper.glData,
+                        styles: this._currentDocument.model.getStyleSheets(),
+                        template: this._currentDocument.fileTemplate,
+                        document: this._currentDocument.model.views.design.iframe.contentWindow.document,
+                        head: this._currentDocument.model.views.design.iframe.contentWindow.document.head,
+                        body: this._currentDocument.model.views.design.iframe.contentWindow.document.body,
+                        mjsTemplateCreator: this._currentDocument.model.views.design.iframe.contentWindow.mjsTemplateCreator
+                    }
+                } else if (view === 'design') {
+                    doc = this._currentDocument.model.views.code.textArea.value;
+                }
+                //Reloading the document from changes made
+                this._currentDocument.reloadView(view, this.fileTemplate, doc);
+            }
+	    }
+    },
+    ////////////////////////////////////////////////////////////////////
+    //
     handleClick: {
         value: function(evt) {
             NJevent("executePreview");
